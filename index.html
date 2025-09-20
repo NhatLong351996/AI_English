@@ -69,9 +69,21 @@
                 <div style="margin-bottom:18px;">
                     <label for="quiz-level-select">Mức độ:</label>
                     <select id="quiz-level-select">
-                        <option value="easy">Dễ</option>
-                        <option value="medium">Trung bình</option>
-                        <option value="hard">Khó</option>
+                        <option value="1.0">Band 1.0</option>
+                        <option value="2.0">Band 2.0</option>
+                        <option value="3.0">Band 3.0</option>
+                        <option value="3.5">Band 3.5</option>
+                        <option value="4.0">Band 4.0</option>
+                        <option value="4.5">Band 4.5</option>
+                        <option value="5.0">Band 5.0</option>
+                        <option value="5.5">Band 5.5</option>
+                        <option value="6.0">Band 6.0</option>
+                        <option value="6.5">Band 6.5</option>
+                        <option value="7.0">Band 7.0</option>
+                        <option value="7.5">Band 7.5</option>
+                        <option value="8.0">Band 8.0</option>
+                        <option value="8.5">Band 8.5</option>
+                        <option value="9.0">Band 9.0</option>
                     </select>
                 </div>
                 <button id="start-quiz-btn" style="margin-right:10px;">Bắt đầu</button>
@@ -119,9 +131,21 @@
             <div style="margin-bottom:18px;">
                 <label for="level-select">Mức độ:</label>
                 <select id="level-select">
-                    <option value="easy">Dễ</option>
-                    <option value="medium">Trung bình</option>
-                    <option value="hard">Khó</option>
+                    <option value="1.0">Band 1.0</option>
+                    <option value="2.0">Band 2.0</option>
+                    <option value="3.0">Band 3.0</option>
+                    <option value="3.5">Band 3.5</option>
+                    <option value="4.0">Band 4.0</option>
+                    <option value="4.5">Band 4.5</option>
+                    <option value="5.0">Band 5.0</option>
+                    <option value="5.5">Band 5.5</option>
+                    <option value="6.0">Band 6.0</option>
+                    <option value="6.5">Band 6.5</option>
+                    <option value="7.0">Band 7.0</option>
+                    <option value="7.5">Band 7.5</option>
+                    <option value="8.0">Band 8.0</option>
+                    <option value="8.5">Band 8.5</option>
+                    <option value="9.0">Band 9.0</option>
                 </select>
             </div>
             <button id="start-translate-btn" style="margin-right:10px;">Bắt đầu</button>
@@ -217,6 +241,8 @@
             document.getElementById('translate-modal').style.display = 'block';
             // Ẩn tạm box Chủ đề | Mức độ khi mở modal
             document.getElementById('translate-info').style.visibility = 'hidden';
+            // Ẩn quiz nếu đang mở
+            document.getElementById('quiz-container').style.display = 'none';
         };
         document.getElementById('close-translate-modal').onclick = function() {
             document.getElementById('translate-modal').style.display = 'none';
@@ -297,11 +323,15 @@ const quizResultBox = document.getElementById('quiz-result-box');
 
 let quizState = null;
 let readingPassage = '';
+let quizTopic = '';
+let quizLevel = '';
 
 startQuizBtn.onclick = async function() {
     // Lấy chủ đề và mức độ
     const topic = document.getElementById('quiz-topic-select').value;
     const level = document.getElementById('quiz-level-select').value;
+    quizTopic = topic;
+    quizLevel = level;
     quizModal.style.display = 'none';
     document.getElementById('home-page').style.display = 'none';
     document.getElementById('chat-container').style.display = 'none';
@@ -322,6 +352,7 @@ startQuizBtn.onclick = async function() {
         quizNextBtn.style.display = 'none';
         quizSubmitBtn.style.display = 'none';
         try {
+            // Chỉ gửi level lên backend
             const resPassage = await fetch('http://127.0.0.1:8000/reading/passage', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -367,11 +398,18 @@ function renderQuizQuestion() {
     const idx = quizState.current;
     const q = quizState.questions[idx];
     quizProgress.textContent = `Câu ${idx+1} / ${quizState.questions.length}`;
+    // Hiển thị thông tin topic và level
+    let topicText = '';
+    let levelText = '';
+    const topicMap = {grammar:'Ngữ pháp', vocabulary:'Từ vựng', reading:'Đọc hiểu'};
+    topicText = topicMap[quizTopic] || quizTopic;
+    levelText = quizLevel ? `Band ${quizLevel}` : '';
+    let infoHtml = `<div style='margin-bottom:8px;font-size:1.05em;color:#7c3aed;font-weight:600;'>Chủ đề: <span style='color:#2563eb;'>${topicText}</span> &nbsp; | &nbsp; Mức độ: <span style='color:#d97706;'>${levelText}</span></div>`;
     // Nếu là reading, luôn hiển thị toàn bộ passage khi làm quiz
-    if (document.getElementById('quiz-topic-select').value === 'reading' && readingPassage) {
-        quizQuestionBox.innerHTML = `<div style='background:#f1f5f9;padding:14px 12px;border-radius:8px;margin-bottom:16px;'><b>Đoạn đọc hiểu:</b><br>${readingPassage.replace(/\n/g,'<br>')}</div>` + q.question;
+    if (quizTopic === 'reading' && readingPassage) {
+        quizQuestionBox.innerHTML = infoHtml + `<div style='background:#f1f5f9;padding:14px 12px;border-radius:8px;margin-bottom:16px;'><b>Đoạn đọc hiểu:</b><br>${readingPassage.replace(/\n/g,'<br>')}</div>` + q.question;
     } else {
-        quizQuestionBox.textContent = q.question;
+        quizQuestionBox.innerHTML = infoHtml + q.question;
     }
     quizAnswersForm.innerHTML = '';
     q.options.forEach((opt, i) => {
@@ -626,6 +664,8 @@ quizSubmitBtn.onclick = function() {
             homePage.style.display = 'block';
             chatContainer.style.display = 'none';
             document.getElementById('translate-container').style.display = 'none';
+            // Ẩn quiz nếu đang mở
+            document.getElementById('quiz-container').style.display = 'none';
             // Ẩn modal nếu đang mở
             document.getElementById('translate-modal').style.display = 'none';
             // Ẩn popup gợi ý nếu đang mở
@@ -637,6 +677,8 @@ quizSubmitBtn.onclick = function() {
             homePage.style.display = 'none';
             chatContainer.style.display = 'block';
             document.getElementById('translate-container').style.display = 'none';
+            // Ẩn quiz nếu đang mở
+            document.getElementById('quiz-container').style.display = 'none';
             document.getElementById('translate-modal').style.display = 'none';
             document.getElementById('hint-popup').style.display = 'none';
         };

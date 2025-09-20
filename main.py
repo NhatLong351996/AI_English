@@ -363,7 +363,9 @@ async def quiz_start(req: QuizStartRequest = Body(...)):
     else:
         system_prompt = (
             f"Bạn là giáo viên luyện thi IELTS. Hãy tạo ra {num} câu hỏi trắc nghiệm tiếng Anh theo phong cách đề thi IELTS (dạng Multiple Choice), sát với nội dung, cấu trúc, và độ khó của đề thi IELTS thực tế. "
-            f"Chủ đề: '{topic}', mức độ: '{level}'. Mỗi câu hỏi nên có ngữ cảnh ngắn gọn (nếu cần), nội dung sát với đề thi IELTS (đặc biệt Reading/Listening). "
+            f"Chủ đề: {topic}. "
+            f"Yêu cầu: Độ khó, từ vựng, cấu trúc ngữ pháp, chủ đề và cách diễn đạt của từng câu hỏi phải tương ứng với band điểm IELTS {level}. "
+            "Mỗi câu hỏi nên có ngữ cảnh ngắn gọn (nếu cần), nội dung sát với đề thi IELTS (đặc biệt Reading/Listening). "
             "Mỗi câu hỏi gồm: question (nội dung), options (4 đáp án), answer (chỉ số đáp án đúng, bắt đầu từ 0), explain (giải thích ngắn gọn bằng tiếng Việt, nêu lý do chọn đáp án đúng, giải thích bẫy nếu có). "
             "Trả về một mảng JSON các object như sau: {question, options, answer, explain}. Không giải thích gì ngoài JSON."
         )
@@ -403,8 +405,12 @@ class ReadingPassageResponse(BaseModel):
 async def reading_passage(req: ReadingPassageRequest):
     import traceback
     level = req.level
+    print("========== [READING PASSAGE REQUEST] ==========")
+    print(f"[RECEIVED LEVEL]: {level}")
+    # ...existing code...
     system_prompt = (
-        "Bạn là giáo viên luyện thi IELTS. Hãy tạo ra một đoạn đọc hiểu tiếng Anh (Reading passage) phù hợp với đề thi IELTS, độ dài khoảng 80-120 từ, chủ đề học thuật hoặc đời sống, độ khó: " + level + ". "
+        f"Bạn là giáo viên luyện thi IELTS. Hãy tạo ra một đoạn đọc hiểu tiếng Anh (Reading passage) phù hợp với đề thi IELTS, độ dài khoảng 80-120 từ. "
+        f"Yêu cầu: Độ khó, từ vựng, cấu trúc ngữ pháp, chủ đề và cách diễn đạt phải tương ứng với band điểm IELTS {level}. "
         "Đoạn văn phải tự nhiên, có thể có các chi tiết gây nhiễu như đề thi thật. Không giải thích, chỉ trả về đoạn văn tiếng Anh. Đảm bảo số từ không vượt quá 120 từ."
     )
     print("[DEBUG] /reading/passage request level:", level)
