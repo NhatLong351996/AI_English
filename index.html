@@ -50,6 +50,34 @@
         <button class="sidebar-btn" id="home-btn"><span style="font-size:1.3rem;margin-right:7px;">🏡</span>Trang chủ</button>
         <button class="sidebar-btn" id="practice-grammar-btn"><span style="font-size:1.3rem;margin-right:7px;">✏️</span>Luyện tập sửa ngữ pháp</button>
     <button class="sidebar-btn" id="practice-translate-btn"><span style="font-size:1.3rem;margin-right:7px;">🌏</span>Luyện dịch chủ đề</button>
+        <button class="sidebar-btn" id="quiz-btn"><span style="font-size:1.3rem;margin-right:7px;">📝</span>Bài Quiz</button>
+        <!-- Modal Quiz (ẩn mặc định) -->
+        <div id="quiz-modal" class="modal" style="display:none;">
+            <div class="modal-content quiz-modal-center">
+                <div class="modal-title-topic-box">
+                    <span class="modal-title-icon">📝</span>
+                    <span class="modal-title-topic-text">Bắt đầu bài Quiz</span>
+                </div>
+                <div style="margin-bottom:16px;">
+                    <label for="quiz-topic-select">Chủ đề Quiz:</label>
+                    <select id="quiz-topic-select">
+                        <option value="grammar">Ngữ pháp</option>
+                        <option value="vocabulary">Từ vựng</option>
+                        <option value="reading">Đọc hiểu</option>
+                    </select>
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label for="quiz-level-select">Mức độ:</label>
+                    <select id="quiz-level-select">
+                        <option value="easy">Dễ</option>
+                        <option value="medium">Trung bình</option>
+                        <option value="hard">Khó</option>
+                    </select>
+                </div>
+                <button id="start-quiz-btn" style="margin-right:10px;">Bắt đầu</button>
+                <button id="close-quiz-modal">Hủy</button>
+            </div>
+        </div>
         <!-- Có thể thêm các chức năng khác ở đây -->
     <!-- Modal chọn chủ đề và mức độ -->
     <div id="translate-modal" class="modal" style="display:none;">
@@ -112,6 +140,17 @@
                 <p>Chọn chức năng luyện tập ở thanh bên trái để bắt đầu.</p>
                 <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Welcome" style="width:120px;margin-top:20px;opacity:0.8;">
             </div>
+            <!-- Giao diện làm quiz -->
+            <div id="quiz-container" style="display:none;max-width:520px;margin:32px auto 0 auto;padding:24px 12px;background:#f8fafc;border-radius:14px;box-shadow:0 2px 12px #ede9fe33;">
+                <div id="quiz-progress" style="margin-bottom:18px;font-weight:600;color:#7c3aed;"></div>
+                <div id="quiz-question-box" style="font-size:1.15em;font-weight:600;margin-bottom:18px;color:#222;"></div>
+                <form id="quiz-answers-form" style="margin-bottom:18px;"></form>
+                <div style="display:flex;gap:12px;justify-content:flex-end;">
+                    <button id="quiz-next-btn" style="display:none;padding:7px 18px;border-radius:7px;background:#ede9fe;color:#7c3aed;font-weight:600;border:none;">Câu tiếp theo</button>
+                    <button id="quiz-submit-btn" style="display:none;padding:7px 18px;border-radius:7px;background:linear-gradient(90deg,#a78bfa 0%,#7c3aed 100%);color:#fff;font-weight:600;border:none;">Nộp bài</button>
+                </div>
+                <div id="quiz-result-box" style="margin-top:18px;"></div>
+            </div>
             <div id="chat-container" style="display:none;">
                 <h2 style="display:none;">English Chat AI</h2>
                 <div id="messages"></div>
@@ -166,6 +205,13 @@
         </footer>
     </div>
     <script>
+        // Khi click vào nút Quiz, mở modal Quiz
+        document.getElementById('quiz-btn').onclick = function() {
+            document.getElementById('quiz-modal').style.display = 'flex';
+        };
+        document.getElementById('close-quiz-modal').onclick = function() {
+            document.getElementById('quiz-modal').style.display = 'none';
+        };
         // Luyện dịch chủ đề: mở modal chọn chủ đề/mức độ
         document.getElementById('practice-translate-btn').onclick = function() {
             document.getElementById('translate-modal').style.display = 'block';
@@ -238,6 +284,184 @@
                 document.getElementById('vi-sentence-box').textContent = 'Lỗi lấy câu, vui lòng thử lại.';
             }
         };
+        // Quiz logic
+const quizModal = document.getElementById('quiz-modal');
+const quizContainer = document.getElementById('quiz-container');
+const startQuizBtn = document.getElementById('start-quiz-btn');
+const quizProgress = document.getElementById('quiz-progress');
+const quizQuestionBox = document.getElementById('quiz-question-box');
+const quizAnswersForm = document.getElementById('quiz-answers-form');
+const quizNextBtn = document.getElementById('quiz-next-btn');
+const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+const quizResultBox = document.getElementById('quiz-result-box');
+
+let quizState = null;
+let readingPassage = '';
+
+startQuizBtn.onclick = async function() {
+    // Lấy chủ đề và mức độ
+    const topic = document.getElementById('quiz-topic-select').value;
+    const level = document.getElementById('quiz-level-select').value;
+    quizModal.style.display = 'none';
+    document.getElementById('home-page').style.display = 'none';
+    document.getElementById('chat-container').style.display = 'none';
+    document.getElementById('translate-container').style.display = 'none';
+    quizContainer.style.display = 'block';
+    quizResultBox.innerHTML = '';
+    quizProgress.textContent = '';
+    quizQuestionBox.textContent = '';
+    quizAnswersForm.innerHTML = '';
+    quizNextBtn.style.display = 'none';
+    quizSubmitBtn.style.display = 'none';
+    readingPassage = '';
+    if (topic === 'reading') {
+        // Chỉ hiển thị "Đang tạo đoạn đọc hiểu..."
+        quizProgress.textContent = '';
+        quizQuestionBox.innerHTML = `<div style='text-align:center;font-size:1.1em;color:#7c3aed;font-weight:600;margin:32px 0;'>Đang tạo đoạn đọc hiểu...</div>`;
+        quizAnswersForm.innerHTML = '';
+        quizNextBtn.style.display = 'none';
+        quizSubmitBtn.style.display = 'none';
+        try {
+            const resPassage = await fetch('http://127.0.0.1:8000/reading/passage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ level })
+            });
+            const dataPassage = await resPassage.json();
+            readingPassage = dataPassage.passage || '';
+            if (!readingPassage) {
+                quizQuestionBox.innerHTML = `<div style='color:#ef4444;'>Không tạo được đoạn đọc hiểu.</div>`;
+                return;
+            }
+            // Sau khi có passage, tiếp tục lấy quiz như cũ
+        } catch (e) {
+            quizQuestionBox.innerHTML = `<div style='color:#ef4444;'>Lỗi tạo đoạn đọc hiểu.</div>`;
+            return;
+        }
+    }
+    // Gọi API lấy quiz, nếu là reading thì gửi kèm passage
+    try {
+        const res = await fetch('http://127.0.0.1:8000/quiz/start', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(topic === 'reading' ? { topic, level, num_questions: 5, passage: readingPassage } : { topic, level, num_questions: 5 })
+        });
+        const data = await res.json();
+        if (!data.questions || !Array.isArray(data.questions) || data.questions.length === 0) {
+            quizProgress.textContent = 'Không có câu hỏi quiz phù hợp.';
+            return;
+        }
+        quizState = {
+            questions: data.questions,
+            current: 0,
+            answers: Array(data.questions.length).fill(null)
+        };
+        renderQuizQuestion();
+    } catch (e) {
+        quizProgress.textContent = 'Lỗi lấy quiz từ server.';
+    }
+};
+
+function renderQuizQuestion() {
+    if (!quizState) return;
+    const idx = quizState.current;
+    const q = quizState.questions[idx];
+    quizProgress.textContent = `Câu ${idx+1} / ${quizState.questions.length}`;
+    // Nếu là reading, luôn hiển thị toàn bộ passage khi làm quiz
+    if (document.getElementById('quiz-topic-select').value === 'reading' && readingPassage) {
+        quizQuestionBox.innerHTML = `<div style='background:#f1f5f9;padding:14px 12px;border-radius:8px;margin-bottom:16px;'><b>Đoạn đọc hiểu:</b><br>${readingPassage.replace(/\n/g,'<br>')}</div>` + q.question;
+    } else {
+        quizQuestionBox.textContent = q.question;
+    }
+    quizAnswersForm.innerHTML = '';
+    q.options.forEach((opt, i) => {
+        const id = `quiz-opt-${idx}-${i}`;
+        const checked = quizState.answers[idx] === i ? 'checked' : '';
+        quizAnswersForm.innerHTML += `<label style='display:block;margin-bottom:7px;cursor:pointer;'><input type='radio' name='quiz-answer' value='${i}' id='${id}' ${checked}> ${opt}</label>`;
+    });
+    quizNextBtn.style.display = (idx < quizState.questions.length - 1) ? 'inline-block' : 'none';
+    quizSubmitBtn.style.display = (idx === quizState.questions.length - 1) ? 'inline-block' : 'none';
+    quizResultBox.innerHTML = '';
+}
+
+quizAnswersForm.onchange = function(e) {
+    if (!quizState) return;
+    const idx = quizState.current;
+    if (e.target && e.target.name === 'quiz-answer') {
+        quizState.answers[idx] = parseInt(e.target.value);
+    }
+};
+
+quizNextBtn.onclick = function() {
+    if (!quizState) return;
+    if (quizState.answers[quizState.current] == null) {
+        quizResultBox.innerHTML = '<span style="color:#ef4444;">Bạn cần chọn đáp án trước khi sang câu tiếp theo.</span>';
+        return;
+    }
+    quizState.current++;
+    renderQuizQuestion();
+};
+
+quizSubmitBtn.onclick = function() {
+    if (!quizState) return;
+    if (quizState.answers[quizState.current] == null) {
+        quizResultBox.innerHTML = '<span style="color:#ef4444;">Bạn cần chọn đáp án trước khi nộp bài.</span>';
+        return;
+    }
+    // Tính điểm và hiển thị kết quả
+    let correct = 0;
+    let html = '<h3>Kết quả Quiz</h3>';
+    quizState.questions.forEach((q, i) => {
+        const userAns = quizState.answers[i];
+        const isCorrect = userAns === q.answer;
+        if (isCorrect) correct++;
+        let passageHtml = readingPassage;
+        let evidenceHtml = '';
+        if (q.evidence && readingPassage) {
+            const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            let ev = q.evidence.trim();
+            let regex = new RegExp(esc(ev), 'gi');
+            // Nếu không tìm thấy, thử bỏ dấu câu cuối
+            if (!passageHtml.match(regex)) {
+                ev = ev.replace(/[.,!?]$/, '');
+                // Chấp nhận evidence kết thúc bằng dấu chấm, phẩy, hoặc không có dấu
+                regex = new RegExp(esc(ev) + '[.,!?]?', 'gi');
+            }
+            passageHtml = passageHtml.replace(regex, match => `<span class="highlight">${match}</span>`);
+            evidenceHtml = `<div style='color:#2563eb;font-size:0.98em;margin-top:4px;'>Đoạn mô tả liên quan: <span class="highlight">${q.evidence}</span></div>`;
+        }
+        html += `<div style='margin-bottom:10px;padding:8px 10px;background:#fff;border-radius:7px;box-shadow:0 1px 4px #ede9fe22;'>` +
+            (readingPassage ? `<div style='background:#f1f5f9;padding:10px 10px;border-radius:7px;margin-bottom:8px;'><b>Đoạn đọc hiểu:</b><br>${passageHtml.replace(/\n/g,'<br>')}</div>` : '') +
+            `<div style='font-weight:600;color:#7c3aed;'>Câu ${i+1}: ${q.question}</div>` +
+            `<div>Đáp án của bạn: <b style='color:${isCorrect ? '#059669':'#ef4444'};'>${q.options[userAns] ?? '-'}</b></div>` +
+            `<div>Đáp án đúng: <b style='color:#2563eb;'>${q.options[q.answer]}</b></div>` +
+            `<div style='color:#d97706;'>Giải thích: ${q.explain || '-'}</div>` +
+            evidenceHtml +
+        `</div>`;
+    });
+    html = `<div style='font-size:1.15em;font-weight:700;margin-bottom:12px;'>Bạn đúng ${correct}/${quizState.questions.length} câu</div>` + html;
+    // Thêm nút làm lại và làm mới quiz
+    html += `<div style='margin-top:18px;display:flex;gap:12px;justify-content:center;'>` +
+        `<button id='quiz-retry-btn' style='padding:7px 18px;border-radius:7px;background:#ede9fe;color:#7c3aed;font-weight:600;border:none;'>Làm lại quiz này</button>` +
+        `<button id='quiz-new-btn' style='padding:7px 18px;border-radius:7px;background:linear-gradient(90deg,#a78bfa 0%,#7c3aed 100%);color:#fff;font-weight:600;border:none;'>Làm quiz mới</button>` +
+        `</div>`;
+    quizResultBox.innerHTML = html;
+    quizNextBtn.style.display = 'none';
+    quizSubmitBtn.style.display = 'none';
+    quizProgress.textContent = 'Đã hoàn thành Quiz!';
+    // Sự kiện cho nút làm lại quiz
+    document.getElementById('quiz-retry-btn').onclick = function() {
+        quizState.current = 0;
+        quizState.answers = Array(quizState.questions.length).fill(null);
+        renderQuizQuestion();
+    };
+    // Sự kiện cho nút làm quiz mới
+    document.getElementById('quiz-new-btn').onclick = function() {
+        quizContainer.style.display = 'none';
+        quizResultBox.innerHTML = '';
+        document.getElementById('quiz-modal').style.display = 'flex';
+    };
+};
         // Xử lý gửi câu dịch, chấm điểm và lấy câu tiếp theo
         // Hàm parseFeedback: ưu tiên parse JSON, fallback sang text nếu cần
         function parseFeedback(feedback, userAnswer) {

@@ -1,5 +1,5 @@
-from typing import Optional
-from fastapi import FastAPI
+from typing import Optional, List
+from fastapi import FastAPI, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
@@ -269,3 +269,160 @@ async def translate_hint(req: HintRequest):
         return {"hints": []}
     except Exception as e:
         return {"hints": [{"info": f"[Lỗi AI]: {e}"}]}
+
+# --- Quiz API ---
+class QuizStartRequest(BaseModel):
+    topic: str
+    level: str
+    num_questions: int = 5
+    passage: str = None  # Thêm trường passage cho reading
+
+class QuizQuestion(BaseModel):
+    question: str
+    options: List[str]
+    answer: int  # index của đáp án đúng
+    explain: str = ""
+    evidence: str = None  # Câu hoặc đoạn liên quan trong passage
+
+class QuizStartResponse(BaseModel):
+    questions: List[QuizQuestion]
+
+# Dữ liệu quiz mẫu
+QUIZ_DATA = {
+    'grammar': {
+        'easy': [
+            {
+                'question': 'Chọn đáp án đúng: She ___ to school every day.',
+                'options': ['go', 'goes', 'going', 'gone'],
+                'answer': 1,
+                'explain': '"She" là ngôi số 3 số ít, động từ thêm -es.'
+            },
+            {
+                'question': 'Chọn đáp án đúng: They ___ football on Sundays.',
+                'options': ['play', 'plays', 'playing', 'played'],
+                'answer': 0,
+                'explain': '"They" là số nhiều, dùng động từ nguyên mẫu.'
+            },
+        ],
+        'medium': [
+            {
+                'question': 'Chọn đáp án đúng: If I ___ time, I will help you.',
+                'options': ['have', 'has', 'had', 'having'],
+                'answer': 0,
+                'explain': 'Câu điều kiện loại 1: If + S + V (hiện tại đơn), ... will + V.'
+            },
+        ],
+        'hard': [
+            {
+                'question': 'Chọn đáp án đúng: The book ___ by my friend yesterday.',
+                'options': ['is given', 'was given', 'gave', 'has given'],
+                'answer': 1,
+                'explain': 'Câu bị động thì quá khứ đơn: was/were + V3.'
+            },
+        ]
+    },
+    'vocabulary': {
+        'easy': [
+            {
+                'question': 'Từ nào sau đây là tên một loại trái cây?',
+                'options': ['apple', 'table', 'car', 'house'],
+                'answer': 0,
+                'explain': 'Apple là quả táo.'
+            },
+        ],
+        'medium': [],
+        'hard': []
+    },
+    'reading': {
+        'easy': [],
+        'medium': [],
+        'hard': []
+    }
+}
+
+@app.post("/quiz/start", response_model=QuizStartResponse)
+async def quiz_start(req: QuizStartRequest = Body(...)):
+    topic = req.topic
+    level = req.level
+    num = req.num_questions
+    passage = getattr(req, 'passage', None)
+    pool = QUIZ_DATA.get(topic, {}).get(level, [])
+    import random
+    if pool and len(pool) >= num:
+        questions = random.sample(pool, min(num, len(pool)))
+        return {"questions": questions}
+    # Nếu không đủ câu hỏi mẫu, dùng AI sinh quiz
+    if topic == "reading" and passage:
+        system_prompt = (
+            f"Bạn là giáo viên luyện thi IELTS. Dưới đây là một đoạn đọc hiểu tiếng Anh (Reading passage):\n{passage}\n"
+            f"Hãy tạo ra {num} câu hỏi trắc nghiệm tiếng Anh theo phong cách đề thi IELTS (dạng Multiple Choice), sát với nội dung đoạn văn trên, cấu trúc và độ khó của đề thi IELTS thực tế. "
+            "Mỗi câu hỏi phải kiểm tra khả năng đọc hiểu, nắm ý chính, chi tiết, suy luận hoặc từ vựng trong đoạn văn. "
+            "Mỗi câu hỏi gồm: question (nội dung), options (4 đáp án), answer (chỉ số đáp án đúng, bắt đầu từ 0), explain (giải thích ngắn gọn bằng tiếng Việt, nêu lý do chọn đáp án đúng, giải thích bẫy nếu có), evidence (chỉ rõ câu hoặc đoạn trong passage liên quan trực tiếp đến đáp án đúng, chỉ trả về đúng 1 câu hoặc đoạn ngắn nhất có thể, không lặp lại toàn bộ passage). "
+            "Trả về một mảng JSON các object như sau: {question, options, answer, explain, evidence}. Không giải thích gì ngoài JSON."
+        )
+    else:
+        system_prompt = (
+            f"Bạn là giáo viên luyện thi IELTS. Hãy tạo ra {num} câu hỏi trắc nghiệm tiếng Anh theo phong cách đề thi IELTS (dạng Multiple Choice), sát với nội dung, cấu trúc, và độ khó của đề thi IELTS thực tế. "
+            f"Chủ đề: '{topic}', mức độ: '{level}'. Mỗi câu hỏi nên có ngữ cảnh ngắn gọn (nếu cần), nội dung sát với đề thi IELTS (đặc biệt Reading/Listening). "
+            "Mỗi câu hỏi gồm: question (nội dung), options (4 đáp án), answer (chỉ số đáp án đúng, bắt đầu từ 0), explain (giải thích ngắn gọn bằng tiếng Việt, nêu lý do chọn đáp án đúng, giải thích bẫy nếu có). "
+            "Trả về một mảng JSON các object như sau: {question, options, answer, explain}. Không giải thích gì ngoài JSON."
+        )
+    try:
+        response = client.chat.completions.create(
+            model=deployment_name,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Hãy sinh {num} câu hỏi quiz. Giải thích (explain) phải bằng tiếng Việt."}
+            ],
+            max_tokens=1200,
+            temperature=0.7
+        )
+        import json, re
+        content = response.choices[0].message.content
+        # Tìm đoạn JSON array trong content
+        match = re.search(r'(\[.*\])', content, re.DOTALL)
+        if match:
+            arr = match.group(1)
+            questions = json.loads(arr)
+            # Đảm bảo đúng định dạng QuizQuestion
+            for q in questions:
+                if 'answer' in q and isinstance(q['answer'], str) and q['answer'].isdigit():
+                    q['answer'] = int(q['answer'])
+            return {"questions": questions}
+        return {"questions": []}
+    except Exception as e:
+        return {"questions": []}
+# --- Reading Passage API ---
+class ReadingPassageRequest(BaseModel):
+    level: str
+
+class ReadingPassageResponse(BaseModel):
+    passage: str
+
+@app.post("/reading/passage", response_model=ReadingPassageResponse)
+async def reading_passage(req: ReadingPassageRequest):
+    import traceback
+    level = req.level
+    system_prompt = (
+        "Bạn là giáo viên luyện thi IELTS. Hãy tạo ra một đoạn đọc hiểu tiếng Anh (Reading passage) phù hợp với đề thi IELTS, độ dài khoảng 80-120 từ, chủ đề học thuật hoặc đời sống, độ khó: " + level + ". "
+        "Đoạn văn phải tự nhiên, có thể có các chi tiết gây nhiễu như đề thi thật. Không giải thích, chỉ trả về đoạn văn tiếng Anh. Đảm bảo số từ không vượt quá 120 từ."
+    )
+    print("[DEBUG] /reading/passage request level:", level)
+    print("[DEBUG] /reading/passage system_prompt:", system_prompt)
+    try:
+        response = client.chat.completions.create(
+            model=deployment_name,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": "Hãy viết đoạn đọc hiểu IELTS."}
+            ],
+            max_tokens=300,
+            temperature=0.8
+        )
+        passage = response.choices[0].message.content.strip()
+        print("[DEBUG] /reading/passage AI response:", passage)
+        return {"passage": passage}
+    except Exception as e:
+        print("[ERROR] /reading/passage Exception:", e)
+        traceback.print_exc()
+        return {"passage": "(Không tạo được đoạn đọc hiểu)"}
