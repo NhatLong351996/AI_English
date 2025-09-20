@@ -446,7 +446,9 @@ quizSubmitBtn.onclick = function() {
         quizResultBox.innerHTML = '<span style="color:#ef4444;">Bạn cần chọn đáp án trước khi nộp bài.</span>';
         return;
     }
-    // Tính điểm và hiển thị kết quả
+    // Ẩn câu hỏi và đáp án khi nộp bài
+    quizQuestionBox.innerHTML = '';
+    quizAnswersForm.innerHTML = '';
     let correct = 0;
     let html = '<h3>Kết quả Quiz</h3>';
     quizState.questions.forEach((q, i) => {
