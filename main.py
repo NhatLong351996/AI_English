@@ -1,15 +1,22 @@
 from typing import Optional, List
 from fastapi import FastAPI, Body
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 from openai import AzureOpenAI
-from dotenv import load_dotenv
-load_dotenv()
 
-api_key = os.getenv("AZURE_OPENAI_API_KEY")
-endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
-deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
+from dotenv import load_dotenv
+from pathlib import Path
+dotenv_path = Path(__file__).parent / ".env"
+load_dotenv(dotenv_path)
+
+
+# Hardcode Azure OpenAI credentials (for environments where .env is not read)
+api_key = "sk-ups5H5N5hbV0SZ4M0OnGuA"
+endpoint = "https://aiportalapi.stu-platform.live/jpe"
+deployment_name = "GPT-4o-mini"
 
 client = AzureOpenAI(
     api_version="2024-07-01-preview",
@@ -18,6 +25,22 @@ client = AzureOpenAI(
 )
 
 app = FastAPI()
+
+# Mount static directory for frontend
+import os
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+if not os.path.exists(STATIC_DIR):
+    os.makedirs(STATIC_DIR)
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+@app.get("/")
+async def root():
+    # Serve the main frontend file
+    index_path = os.path.join(STATIC_DIR, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path, media_type="text/html")
+    # fallback: if not found, show error
+    return {"error": "index.html not found in static/"}
 
 app.add_middleware(
     CORSMiddleware,
