@@ -293,7 +293,7 @@
             document.getElementById('translate-feedback').textContent = '';
             document.getElementById('translate-next-box').textContent = '';
             try {
-                const res = await fetch('http://127.0.0.1:8000/translate/start', {
+                const res = await fetch('https://ai-english-hbsj.onrender.com/translate/start', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ topic, level })
@@ -353,7 +353,7 @@ startQuizBtn.onclick = async function() {
         quizSubmitBtn.style.display = 'none';
         try {
             // Chỉ gửi level lên backend
-            const resPassage = await fetch('http://127.0.0.1:8000/reading/passage', {
+            const resPassage = await fetch('https://ai-english-hbsj.onrender.com/reading/passage', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ level })
@@ -372,7 +372,7 @@ startQuizBtn.onclick = async function() {
     }
     // Gọi API lấy quiz, nếu là reading thì gửi kèm passage
     try {
-        const res = await fetch('http://127.0.0.1:8000/quiz/start', {
+        const res = await fetch('https://ai-english-hbsj.onrender.com/quiz/start', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(topic === 'reading' ? { topic, level, num_questions: 5, passage: readingPassage } : { topic, level, num_questions: 5 })
@@ -539,7 +539,7 @@ quizSubmitBtn.onclick = function() {
             feedbackDiv.innerHTML = '<span style="color:#7c3aed;font-weight:600;">Đang chấm...</span>';
             try {
                 if (!state.history_bilingual) state.history_bilingual = [];
-                const res = await fetch('http://127.0.0.1:8000/translate/next', {
+                const res = await fetch('https://ai-english-hbsj.onrender.com/translate/next', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -623,7 +623,7 @@ quizSubmitBtn.onclick = function() {
                 // Gửi toàn bộ đoạn đã dịch (song ngữ) lên backend để AI sinh câu mới nối tiếp
                 const bilingualHistory = state.history_bilingual || [];
                 const paragraph = bilingualHistory.map(item => ({vi: item.vi, en: item.en}));
-                const res = await fetch('http://127.0.0.1:8000/translate/start', {
+                const res = await fetch('https://ai-english-hbsj.onrender.com/translate/start', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ topic: state.topic, level: state.level, prev_history: state.history, paragraph })
@@ -709,7 +709,7 @@ quizSubmitBtn.onclick = function() {
             userInput.value = '';
             appendMessage('...', 'ai');
             try {
-                const res = await fetch('http://127.0.0.1:8000/chat', {
+                const res = await fetch('https://ai-english-hbsj.onrender.com/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: text })
@@ -753,7 +753,7 @@ quizSubmitBtn.onclick = function() {
             }
             hintContent.innerHTML = '<span style="color:#7c3aed;">Đang lấy gợi ý...</span>';
             document.getElementById('hint-popup').style.display = 'block';
-            fetch('http://127.0.0.1:8000/translate/hint', {
+            fetch('https://ai-english-hbsj.onrender.com/translate/hint', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ vi_sentence: vi })
