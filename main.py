@@ -12,7 +12,6 @@ from pathlib import Path
 dotenv_path = Path(__file__).parent / ".env"
 load_dotenv(dotenv_path)
 
-
 # Hardcode Azure OpenAI credentials (for environments where .env is not read)
 api_key = "sk-ups5H5N5hbV0SZ4M0OnGuA"
 endpoint = "https://aiportalapi.stu-platform.live/jpe"
@@ -455,3 +454,54 @@ async def reading_passage(req: ReadingPassageRequest):
         print("[ERROR] /reading/passage Exception:", e)
         traceback.print_exc()
         return {"passage": "(Không tạo được đoạn đọc hiểu)"}
+# --- Listening Practice API ---
+class ListeningRequest(BaseModel):
+    topic: str
+    band: str
+
+class ListeningResponse(BaseModel):
+    text: str
+    answer: str
+    audioUrl: str = None
+
+@app.post("/api/generate-listening", response_model=ListeningResponse)
+async def generate_listening(req: ListeningRequest):
+    import traceback
+    topic = req.topic
+    band = req.band
+    print("========== [LISTENING REQUEST] ==========")
+    print(f"[RECEIVED TOPIC]: {topic}")
+    print(f"[RECEIVED BAND]: {band}")
+    # Prompt cho AI sinh câu luyện nghe
+    system_prompt = (
+        f"Bạn là giáo viên luyện thi IELTS. Hãy tạo ra 1 câu tiếng Anh phù hợp để luyện nghe, sát với đề thi IELTS Listening, chủ đề: {topic}, band điểm: {band}. "
+        "Câu phải tự nhiên, không quá dài, không quá dễ nếu band cao. Trả về đúng 1 câu tiếng Anh, không giải thích, không thêm gì khác."
+    )
+    print("[DEBUG] /api/generate-listening system_prompt:", system_prompt)
+    try:
+        response = client.chat.completions.create(
+            model=deployment_name,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": "Hãy cho tôi 1 câu tiếng Anh phù hợp để luyện nghe."}
+            ],
+            max_tokens=60,
+            temperature=1.0
+        )
+        text = response.choices[0].message.content.strip()
+        answer = text
+        print("[DEBUG] /api/generate-listening AI response:", text)
+        # Nếu có dịch vụ tạo audio, có thể tích hợp ở đây
+        audioUrl = ""  # Luôn trả về chuỗi rỗng nếu không có audio
+        # Ví dụ: sử dụng dịch vụ TTS bên ngoài để tạo audio file, trả về url
+        # audioUrl = tts_service_generate(text)
+        return {"text": text, "answer": answer, "audioUrl": audioUrl}
+    except Exception as e:
+        print("[ERROR] /api/generate-listening Exception:", e)
+        traceback.print_exc()
+        return {"text": "(Không tạo được câu luyện nghe)", "answer": "", "audioUrl": ""}
+
+# Thêm route GET để tránh lỗi khi truy cập trực tiếp bằng GET
+@app.post("/api/generate-listening")
+async def get_listening_info():
+    return {"message": "Vui lòng sử dụng phương thức POST để tạo câu luyện nghe."}

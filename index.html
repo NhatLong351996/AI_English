@@ -1,40 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-        <meta charset="UTF-8">
-        <title>English Chat AI</title>
-         <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <title>English Chat AI</title>
+    <link rel="stylesheet" href="/static/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap" rel="stylesheet">
-    </head>
+</head>
+
 <body>
-    <nav id="sidebar">
-    <!-- Nút mở lại sidebar khi đã đóng -->
-    <button id="sidebar-open-btn" style="display:none;position:fixed;top:22px;left:10px;z-index:1001;background:#ede9fe;color:#7c3aed;border:none;border-radius:50%;width:38px;height:38px;box-shadow:0 2px 8px #ede9fe;align-items:center;justify-content:center;cursor:pointer;padding:0;">
-        <svg viewBox="0 0 48 48" width="28" height="28">
-            <g id="cat-head">
-                <ellipse cx="24" cy="28" rx="12" ry="10" fill="#7c3aed"/>
-                <ellipse cx="15" cy="16" rx="4" ry="6" fill="#7c3aed" transform="rotate(-20 15 16)"/>
-                <ellipse cx="33" cy="16" rx="4" ry="6" fill="#7c3aed" transform="rotate(20 33 16)"/>
-                <ellipse cx="20" cy="30" rx="2.5" ry="1.2" fill="#fff"/>
-                <ellipse cx="28" cy="30" rx="2.5" ry="1.2" fill="#fff"/>
-                <ellipse cx="20" cy="28" rx="1.2" ry="1.2" fill="#222"/>
-                <ellipse cx="28" cy="28" rx="1.2" ry="1.2" fill="#222"/>
-                <ellipse cx="24" cy="34" rx="2.5" ry="1.2" fill="#fff"/>
-            </g>
+    <!-- Nút scroll lên đầu trang -->
+    <button id="scroll-top-btn"
+        style="position:fixed;right:32px;bottom:32px;z-index:9999;background:#7c3aed;border:none;border-radius:50%;width:48px;height:48px;box-shadow:0 4px 16px #7c3aed33;display:none;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.18s;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+            <path fill="#fff" d="M12 4l-8 8h6v8h4v-8h6z" />
         </svg>
     </button>
+    <nav id="sidebar">
+        <!-- Nút mở lại sidebar khi đã đóng -->
+        <button id="sidebar-open-btn"
+            style="display:none;position:fixed;top:22px;left:10px;z-index:1001;background:#ede9fe;color:#7c3aed;border:none;border-radius:50%;width:38px;height:38px;box-shadow:0 2px 8px #ede9fe;align-items:center;justify-content:center;cursor:pointer;padding:0;">
+            <svg viewBox="0 0 48 48" width="28" height="28">
+                <g id="cat-head">
+                    <ellipse cx="24" cy="28" rx="12" ry="10" fill="#7c3aed" />
+                    <ellipse cx="15" cy="16" rx="4" ry="6" fill="#7c3aed" transform="rotate(-20 15 16)" />
+                    <ellipse cx="33" cy="16" rx="4" ry="6" fill="#7c3aed" transform="rotate(20 33 16)" />
+                    <ellipse cx="20" cy="30" rx="2.5" ry="1.2" fill="#fff" />
+                    <ellipse cx="28" cy="30" rx="2.5" ry="1.2" fill="#fff" />
+                    <ellipse cx="20" cy="28" rx="1.2" ry="1.2" fill="#222" />
+                    <ellipse cx="28" cy="28" rx="1.2" ry="1.2" fill="#222" />
+                    <ellipse cx="24" cy="34" rx="2.5" ry="1.2" fill="#fff" />
+                </g>
+            </svg>
+        </button>
         <div class="sidebar-toggle" id="sidebar-toggle" title="Ẩn/hiện thanh chức năng">
             <span id="sidebar-cat" style="display:block;width:28px;height:28px;">
                 <svg viewBox="0 0 48 48" width="28" height="28">
                     <g id="cat-head">
-                        <ellipse cx="24" cy="28" rx="12" ry="10" fill="#7c3aed"/>
-                        <ellipse cx="15" cy="16" rx="4" ry="6" fill="#7c3aed" transform="rotate(-20 15 16)"/>
-                        <ellipse cx="33" cy="16" rx="4" ry="6" fill="#7c3aed" transform="rotate(20 33 16)"/>
-                        <ellipse cx="20" cy="30" rx="2.5" ry="1.2" fill="#fff"/>
-                        <ellipse cx="28" cy="30" rx="2.5" ry="1.2" fill="#fff"/>
-                        <ellipse cx="20" cy="28" rx="1.2" ry="1.2" fill="#222"/>
-                        <ellipse cx="28" cy="28" rx="1.2" ry="1.2" fill="#222"/>
-                        <ellipse cx="24" cy="34" rx="2.5" ry="1.2" fill="#fff"/>
+                        <ellipse cx="24" cy="28" rx="12" ry="10" fill="#7c3aed" />
+                        <ellipse cx="15" cy="16" rx="4" ry="6" fill="#7c3aed" transform="rotate(-20 15 16)" />
+                        <ellipse cx="33" cy="16" rx="4" ry="6" fill="#7c3aed" transform="rotate(20 33 16)" />
+                        <ellipse cx="20" cy="30" rx="2.5" ry="1.2" fill="#fff" />
+                        <ellipse cx="28" cy="30" rx="2.5" ry="1.2" fill="#fff" />
+                        <ellipse cx="20" cy="28" rx="1.2" ry="1.2" fill="#222" />
+                        <ellipse cx="28" cy="28" rx="1.2" ry="1.2" fill="#222" />
+                        <ellipse cx="24" cy="34" rx="2.5" ry="1.2" fill="#fff" />
                     </g>
                 </svg>
             </span>
@@ -47,10 +57,18 @@
             <span class="section-icon">✨</span>
             <span class="section-text">Chức năng</span>
         </div>
-        <button class="sidebar-btn" id="home-btn"><span style="font-size:1.3rem;margin-right:7px;">🏡</span>Trang chủ</button>
-        <button class="sidebar-btn" id="practice-grammar-btn"><span style="font-size:1.3rem;margin-right:7px;">✏️</span>Luyện tập sửa ngữ pháp</button>
-    <button class="sidebar-btn" id="practice-translate-btn"><span style="font-size:1.3rem;margin-right:7px;">🌏</span>Luyện dịch chủ đề</button>
-        <button class="sidebar-btn" id="quiz-btn"><span style="font-size:1.3rem;margin-right:7px;">📝</span>Bài Quiz</button>
+        <button class="sidebar-btn" id="home-btn"><span style="font-size:1.3rem;margin-right:7px;">🏡</span>Trang
+            chủ</button>
+        <button class="sidebar-btn" id="practice-grammar-btn"><span
+                style="font-size:1.3rem;margin-right:7px;">✏️</span>Luyện tập sửa ngữ pháp</button>
+        <button class="sidebar-btn" id="practice-translate-btn"><span
+                style="font-size:1.3rem;margin-right:7px;">🌏</span>Luyện dịch chủ đề</button>
+        <button class="sidebar-btn" id="vocab-btn"><span style="font-size:1.3rem;margin-right:7px;">📚</span>Luyện từ
+            vựng</button>
+        <button class="sidebar-btn" id="quiz-btn"><span style="font-size:1.3rem;margin-right:7px;">📝</span>Bài
+            Quiz</button>
+        <button class="sidebar-btn" id="listening-btn"><span style="font-size:1.3rem;margin-right:7px;">🎧</span>Luyện
+            nghe</button>
         <!-- Modal Quiz (ẩn mặc định) -->
         <div id="quiz-modal" class="modal" style="display:none;">
             <div class="modal-content quiz-modal-center">
@@ -91,67 +109,69 @@
             </div>
         </div>
         <!-- Có thể thêm các chức năng khác ở đây -->
-    <!-- Modal chọn chủ đề và mức độ -->
-    <div id="translate-modal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <div class="modal-title-topic-box">
-                <span class="modal-title-icon">📝</span>
-                <span class="modal-title-topic-text">Chọn chủ đề & mức độ</span>
-            </div>
-            <div style="margin-bottom:12px;">
-                <div class="topic-radio-group-enhanced">
-                    <label class="topic-radio-label-enhanced">
-                        <input type="radio" name="topic-mode" id="topic-mode-select" value="select" checked>
-                        <span class="radio-custom-enhanced">🎯</span>
-                        <span class="radio-title">Chủ đề có sẵn</span>
-                        <span class="radio-desc">(Chọn từ danh sách các chủ đề phổ biến)</span>
-                    </label>
-                    <label class="topic-radio-label-enhanced">
-                        <input type="radio" name="topic-mode" id="topic-mode-custom" value="custom">
-                        <span class="radio-custom-enhanced">✏️</span>
-                        <span class="radio-title">Tự nhập chủ đề</span>
-                        <span class="radio-desc">(Bạn tự gõ chủ đề muốn luyện dịch)</span>
-                    </label>
+        <!-- Modal chọn chủ đề và mức độ -->
+        <div id="translate-modal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <div class="modal-title-topic-box">
+                    <span class="modal-title-icon">📝</span>
+                    <span class="modal-title-topic-text">Chọn chủ đề & mức độ</span>
                 </div>
-                <div id="topic-select-box">
-                    <label for="topic-select">Chủ đề:</label>
-                    <select id="topic-select">
-                        <option value="travel">Du lịch</option>
-                        <option value="school">Học tập</option>
-                        <option value="work">Công việc</option>
-                        <option value="family">Gia đình</option>
-                        <option value="food">Ẩm thực</option>
+                <div style="margin-bottom:12px;">
+                    <div class="topic-radio-group-enhanced">
+                        <label class="topic-radio-label-enhanced">
+                            <input type="radio" name="topic-mode" id="topic-mode-select" value="select" checked>
+                            <span class="radio-custom-enhanced">🎯</span>
+                            <span class="radio-title">Chủ đề có sẵn</span>
+                            <span class="radio-desc">(Chọn từ danh sách các chủ đề phổ biến)</span>
+                        </label>
+                        <label class="topic-radio-label-enhanced">
+                            <input type="radio" name="topic-mode" id="topic-mode-custom" value="custom">
+                            <span class="radio-custom-enhanced">✏️</span>
+                            <span class="radio-title">Tự nhập chủ đề</span>
+                            <span class="radio-desc">(Bạn tự gõ chủ đề muốn luyện dịch)</span>
+                        </label>
+                    </div>
+                    <div id="topic-select-box">
+                        <label for="topic-select">Chủ đề:</label>
+                        <select id="topic-select">
+                            <option value="travel">Du lịch</option>
+                            <option value="school">Học tập</option>
+                            <option value="work">Công việc</option>
+                            <option value="family">Gia đình</option>
+                            <option value="food">Ẩm thực</option>
+                        </select>
+                    </div>
+                    <div id="custom-topic-box" style="display:none;margin-top:8px;">
+                        <label for="custom-topic-input" style="color:#7c3aed;font-weight:500;">Nhập chủ đề bạn
+                            muốn:</label>
+                        <input id="custom-topic-input" type="text" placeholder="Ví dụ: Công nghệ, Sức khỏe, ..."
+                            style="margin-top:6px;width:92%;padding:8px 12px;border-radius:8px;border:1.5px solid #a78bfa;font-size:1.08rem;outline:none;box-shadow:0 1.5px 8px #ede9fe33;transition:border 0.18s;" />
+                    </div>
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label for="level-select">Mức độ:</label>
+                    <select id="level-select">
+                        <option value="1.0">Band 1.0</option>
+                        <option value="2.0">Band 2.0</option>
+                        <option value="3.0">Band 3.0</option>
+                        <option value="3.5">Band 3.5</option>
+                        <option value="4.0">Band 4.0</option>
+                        <option value="4.5">Band 4.5</option>
+                        <option value="5.0">Band 5.0</option>
+                        <option value="5.5">Band 5.5</option>
+                        <option value="6.0">Band 6.0</option>
+                        <option value="6.5">Band 6.5</option>
+                        <option value="7.0">Band 7.0</option>
+                        <option value="7.5">Band 7.5</option>
+                        <option value="8.0">Band 8.0</option>
+                        <option value="8.5">Band 8.5</option>
+                        <option value="9.0">Band 9.0</option>
                     </select>
                 </div>
-                <div id="custom-topic-box" style="display:none;margin-top:8px;">
-                    <label for="custom-topic-input" style="color:#7c3aed;font-weight:500;">Nhập chủ đề bạn muốn:</label>
-                    <input id="custom-topic-input" type="text" placeholder="Ví dụ: Công nghệ, Sức khỏe, ..." style="margin-top:6px;width:92%;padding:8px 12px;border-radius:8px;border:1.5px solid #a78bfa;font-size:1.08rem;outline:none;box-shadow:0 1.5px 8px #ede9fe33;transition:border 0.18s;" />
-                </div>
+                <button id="start-translate-btn" style="margin-right:10px;">Bắt đầu</button>
+                <button id="close-translate-modal">Hủy</button>
             </div>
-            <div style="margin-bottom:18px;">
-                <label for="level-select">Mức độ:</label>
-                <select id="level-select">
-                    <option value="1.0">Band 1.0</option>
-                    <option value="2.0">Band 2.0</option>
-                    <option value="3.0">Band 3.0</option>
-                    <option value="3.5">Band 3.5</option>
-                    <option value="4.0">Band 4.0</option>
-                    <option value="4.5">Band 4.5</option>
-                    <option value="5.0">Band 5.0</option>
-                    <option value="5.5">Band 5.5</option>
-                    <option value="6.0">Band 6.0</option>
-                    <option value="6.5">Band 6.5</option>
-                    <option value="7.0">Band 7.0</option>
-                    <option value="7.5">Band 7.5</option>
-                    <option value="8.0">Band 8.0</option>
-                    <option value="8.5">Band 8.5</option>
-                    <option value="9.0">Band 9.0</option>
-                </select>
-            </div>
-            <button id="start-translate-btn" style="margin-right:10px;">Bắt đầu</button>
-            <button id="close-translate-modal">Hủy</button>
         </div>
-    </div>
     </nav>
     <div style="flex:1;display:flex;flex-direction:column;">
         <header>
@@ -159,19 +179,131 @@
             <div class="header-slogan">Luyện dịch & sửa ngữ pháp tiếng Anh thông minh</div>
         </header>
         <div id="main-content" style="flex:1;">
+            <!-- Giao diện luyện nghe -->
+            <div id="listening-container"
+                style="display:none;max-width:520px;margin:32px auto 0 auto;padding:24px 12px;background:#f8fafc;border-radius:14px;box-shadow:0 2px 12px #ede9fe33;">
+                <h2 style="text-align:center;color:#7c3aed;margin-bottom:18px;">Luyện nghe tiếng Anh</h2>
+                <div style="margin-bottom:18px;">
+                    <label for="listening-topic-select">Chủ đề:</label>
+                    <select id="listening-topic-select">
+                        <option value="daily">Giao tiếp hàng ngày</option>
+                        <option value="school">Trường học</option>
+                        <option value="travel">Du lịch</option>
+                        <option value="work">Công việc</option>
+                    </select>
+                    <label for="listening-band-select" style="margin-left:18px;">Band điểm IELTS:</label>
+                    <select id="listening-band-select">
+                        <option value="1.0">Band 1.0</option>
+                        <option value="2.0">Band 2.0</option>
+                        <option value="3.0">Band 3.0</option>
+                        <option value="3.5">Band 3.5</option>
+                        <option value="4.0">Band 4.0</option>
+                        <option value="4.5">Band 4.5</option>
+                        <option value="5.0">Band 5.0</option>
+                        <option value="5.5">Band 5.5</option>
+                        <option value="6.0">Band 6.0</option>
+                        <option value="6.5">Band 6.5</option>
+                        <option value="7.0">Band 7.0</option>
+                        <option value="7.5">Band 7.5</option>
+                        <option value="8.0">Band 8.0</option>
+                        <option value="8.5">Band 8.5</option>
+                        <option value="9.0">Band 9.0</option>
+                    </select>
+                    <button id="start-listening-btn" style="margin-left:18px;">Bắt đầu</button>
+                </div>
+                <div id="listening-question-box" style="margin-bottom:18px;"></div>
+                <div id="listening-audio-box" style="margin-bottom:18px;"></div>
+                <input id="listening-answer-input" type="text" placeholder="Nhập đáp án bạn nghe được..."
+                    style="width:100%;padding:8px 12px;border-radius:8px;border:1.5px solid #a78bfa;font-size:1.08rem;outline:none;box-shadow:0 1.5px 8px #ede9fe33;transition:border 0.18s;margin-bottom:12px;" />
+                <button id="check-listening-btn"
+                    style="padding:7px 18px;border-radius:7px;background:linear-gradient(90deg,#a78bfa 0%,#7c3aed 100%);color:#fff;font-weight:600;border:none;">Kiểm
+                    tra đáp án</button>
+                <div id="listening-feedback" style="min-height:32px;margin-top:12px;font-size:1.08em;"></div>
+            </div>
+            <div id="vocab-container"
+                style="display:none;max-width:420px;margin:32px auto 0 auto;padding:24px 12px;background:#f8fafc;border-radius:14px;box-shadow:0 2px 12px #ede9fe33;">
+                <h2 style="text-align:center;color:#7c3aed;margin-bottom:18px;">Luyện từ vựng (Flashcard)</h2>
+                <div id="vocab-flashcard" class="flip-card" style="margin-bottom:18px;">
+                    <div class="flip-card-inner" id="vocab-flip-inner">
+                        <div class="flip-card-front">
+                            <div
+                                style="display:flex;align-items:center;justify-content:center;margin-bottom:10px;gap:10px;min-height:56px;">
+                                <span id="vocab-word"
+                                    style="font-size:2.1em;font-weight:800;color:#2563eb;line-height:1.1;vertical-align:middle;display:inline-block;text-shadow:0 2px 8px #ede9fe77;">
+                                </span>
+                                <button id="vocab-speak-btn"
+                                    style="background:none;border:none;cursor:pointer;padding:0;margin:0;vertical-align:middle;display:inline-flex;align-items:center;transition:transform 0.18s;"
+                                    title="Nghe phát âm" onmouseover="this.style.transform='scale(1.18)'"
+                                    onmouseout="this.style.transform='scale(1)'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                                        style="vertical-align:middle;">
+                                        <path fill="#3b82f6"
+                                            d="M3 10v4h4l5 5V5L7 10H3zm13.5 2c0-1.77-1.02-3.29-2.5-4.03v8.06c1.48-.74 2.5-2.26 2.5-4.03zm2.5 0c0 3.04-1.64 5.64-4.5 6.32v-2.02c2.01-.45 3.5-2.24 3.5-4.3s-1.49-3.85-3.5-4.3V5.68c2.86.68 4.5 3.28 4.5 6.32z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <button id="show-meaning-btn"
+                                style="background:#ede9fe;color:#7c3aed;border:none;border-radius:7px;padding:6px 18px;font-weight:600;cursor:pointer;">Hiện
+                                nghĩa</button>
+                        </div>
+                        <div class="flip-card-back">
+                            <img id="vocab-image-back"
+                                style="display:none;margin:0 auto 10px auto;max-width:90px;max-height:90px;border-radius:12px;box-shadow:0 2px 8px #ede9fe55;" />
+                            <div id="vocab-meaning" style="font-size:1.08em;color:#059669;margin-bottom:10px;"></div>
+                            <div id="vocab-phonetic" style="font-size:1em;color:#7c3aed;"></div>
+                            <button id="flip-back-btn"
+                                style="margin-top:12px;background:#ede9fe;color:#7c3aed;border:none;border-radius:7px;padding:6px 18px;font-weight:600;cursor:pointer;">Lật
+                                lại</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="vocab-nav-btns" style="display:flex;gap:12px;justify-content:center;margin-bottom:18px;">
+                    <button id="prev-vocab-btn"
+                        style="padding:7px 18px;border-radius:7px;background:#ede9fe;color:#7c3aed;font-weight:600;border:none;">Quay
+                        lại</button>
+                    <button id="next-vocab-btn"
+                        style="padding:7px 18px;border-radius:7px;background:linear-gradient(90deg,#a78bfa 0%,#7c3aed 100%);color:#fff;font-weight:600;border:none;">Tiếp
+                        theo</button>
+                </div>
+                <div style="text-align:center;margin-bottom:18px;color:#7c3aed;font-size:0.98em;">
+                    <span id="vocab-progress"></span>
+                </div>
+                <div style="background:#f3f4f6;padding:14px 10px;border-radius:10px;margin-bottom:18px;">
+                    <h3 style="color:#7c3aed;font-size:1.08em;margin-bottom:8px;">Thêm từ mới</h3>
+                    <form id="add-vocab-form" style="display:flex;flex-direction:column;gap:8px;">
+                        <input id="vocab-input-word" type="text" placeholder="Từ tiếng Anh" required
+                            style="padding:7px 10px;border-radius:7px;border:1px solid #a78bfa;" />
+                        <input id="vocab-input-meaning" type="text" placeholder="Nghĩa tiếng Việt" required
+                            style="padding:7px 10px;border-radius:7px;border:1px solid #a78bfa;" />
+                        <input id="vocab-input-phonetic" type="text" placeholder="Phiên âm (tùy chọn)"
+                            style="padding:7px 10px;border-radius:7px;border:1px solid #a78bfa;" />
+                        <button type="submit"
+                            style="padding:7px 18px;border-radius:7px;background:#ede9fe;color:#7c3aed;font-weight:600;border:none;">Thêm
+                            từ</button>
+                    </form>
+                    <div id="add-vocab-msg" style="color:#059669;margin-top:8px;font-size:0.98em;"></div>
+                </div>
+            </div>
             <div id="home-page" style="display:block;padding:40px 24px;text-align:center;">
                 <h2>Chào mừng đến với English Chat AI!</h2>
                 <p>Chọn chức năng luyện tập ở thanh bên trái để bắt đầu.</p>
-                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Welcome" style="width:120px;margin-top:20px;opacity:0.8;">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Welcome"
+                    style="width:120px;margin-top:20px;opacity:0.8;">
             </div>
             <!-- Giao diện làm quiz -->
-            <div id="quiz-container" style="display:none;max-width:520px;margin:32px auto 0 auto;padding:24px 12px;background:#f8fafc;border-radius:14px;box-shadow:0 2px 12px #ede9fe33;">
+            <div id="quiz-container"
+                style="display:none;max-width:520px;margin:32px auto 0 auto;padding:24px 12px;background:#f8fafc;border-radius:14px;box-shadow:0 2px 12px #ede9fe33;">
                 <div id="quiz-progress" style="margin-bottom:18px;font-weight:600;color:#7c3aed;"></div>
-                <div id="quiz-question-box" style="font-size:1.15em;font-weight:600;margin-bottom:18px;color:#222;"></div>
+                <div id="quiz-question-box" style="font-size:1.15em;font-weight:600;margin-bottom:18px;color:#222;">
+                </div>
                 <form id="quiz-answers-form" style="margin-bottom:18px;"></form>
                 <div style="display:flex;gap:12px;justify-content:flex-end;">
-                    <button id="quiz-next-btn" style="display:none;padding:7px 18px;border-radius:7px;background:#ede9fe;color:#7c3aed;font-weight:600;border:none;">Câu tiếp theo</button>
-                    <button id="quiz-submit-btn" style="display:none;padding:7px 18px;border-radius:7px;background:linear-gradient(90deg,#a78bfa 0%,#7c3aed 100%);color:#fff;font-weight:600;border:none;">Nộp bài</button>
+                    <button id="quiz-next-btn"
+                        style="display:none;padding:7px 18px;border-radius:7px;background:#ede9fe;color:#7c3aed;font-weight:600;border:none;">Câu
+                        tiếp theo</button>
+                    <button id="quiz-submit-btn"
+                        style="display:none;padding:7px 18px;border-radius:7px;background:linear-gradient(90deg,#a78bfa 0%,#7c3aed 100%);color:#fff;font-weight:600;border:none;">Nộp
+                        bài</button>
                 </div>
                 <div id="quiz-result-box" style="margin-top:18px;"></div>
             </div>
@@ -184,44 +316,66 @@
                 </div>
             </div>
             <!-- Giao diện luyện dịch chủ đề -->
-            <div id="translate-container" style="display:none;padding:32px 12px;max-width:520px;margin:0 auto;position:relative;">
+            <div id="translate-container"
+                style="display:none;padding:32px 12px;max-width:520px;margin:0 auto;position:relative;">
                 <div id="translate-info" class="translate-info-box translate-info-fixed"></div>
-                <h2 style="text-align:center;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:10px;">
-                    <span class="cute-anim-icon" style="display:inline-block;animation:bounce 1.2s infinite alternate cubic-bezier(.5,1.5,.5,1);font-size:1.6em;">🐾</span>
+                <h2
+                    style="text-align:center;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:10px;">
+                    <span class="cute-anim-icon"
+                        style="display:inline-block;animation:bounce 1.2s infinite alternate cubic-bezier(.5,1.5,.5,1);font-size:1.6em;">🐾</span>
                     Luyện dịch theo chủ đề
                 </h2>
-    <style>
-    @keyframes bounce {
-        0% { transform: translateY(0); }
-        100% { transform: translateY(-12px) scale(1.15); }
-    }
-    .cute-anim-icon {
-        will-change: transform;
-        filter: drop-shadow(0 2px 6px #ede9fe);
-    }
-    </style>
-                <div style="display:flex;align-items:center;justify-content:center;margin-bottom:18px;gap:10px;position:relative;">
-                    <div id="vi-sentence-box" style="background:#ede9fe;border-radius:10px;padding:18px 14px;font-size:1.13rem;color:#5b21b6;min-height:32px;text-align:center;font-weight:500;"></div>
-                    <button id="show-hint-btn" style="background:#fff;border:1.5px solid #a78bfa;color:#7c3aed;border-radius:50%;width:38px;height:38px;box-shadow:0 2px 8px #ede9fe;display:flex;align-items:center;justify-content:center;cursor:pointer;" title="Xem gợi ý dịch">
+                <style>
+                    @keyframes bounce {
+                        0% {
+                            transform: translateY(0);
+                        }
+
+                        100% {
+                            transform: translateY(-12px) scale(1.15);
+                        }
+                    }
+
+                    .cute-anim-icon {
+                        will-change: transform;
+                        filter: drop-shadow(0 2px 6px #ede9fe);
+                    }
+                </style>
+                <div
+                    style="display:flex;align-items:center;justify-content:center;margin-bottom:18px;gap:10px;position:relative;">
+                    <div id="vi-sentence-box"
+                        style="background:#ede9fe;border-radius:10px;padding:18px 14px;font-size:1.13rem;color:#5b21b6;min-height:32px;text-align:center;font-weight:500;">
+                    </div>
+                    <button id="show-hint-btn"
+                        style="background:#fff;border:1.5px solid #a78bfa;color:#7c3aed;border-radius:50%;width:38px;height:38px;box-shadow:0 2px 8px #ede9fe;display:flex;align-items:center;justify-content:center;cursor:pointer;"
+                        title="Xem gợi ý dịch">
                         <span style="font-size:1.3em;">💡</span>
                     </button>
-                    <div id="hint-popup" style="display:none;position:absolute;left:110%;top:0;background:#fff;border:1.5px solid #a78bfa;border-radius:12px;box-shadow:0 4px 16px #ede9fe;padding:18px 20px;z-index:1002;min-width:260px;max-width:90vw;">
-                        <div style="font-weight:600;color:#7c3aed;margin-bottom:8px;font-size:1.08em;">Gợi ý từ vựng & cấu trúc</div>
+                    <div id="hint-popup"
+                        style="display:none;position:absolute;left:110%;top:0;background:#fff;border:1.5px solid #a78bfa;border-radius:12px;box-shadow:0 4px 16px #ede9fe;padding:18px 20px;z-index:1002;min-width:260px;max-width:90vw;">
+                        <div style="font-weight:600;color:#7c3aed;margin-bottom:8px;font-size:1.08em;">Gợi ý từ vựng &
+                            cấu trúc</div>
                         <div id="hint-content" style="color:#333;font-size:1.04em;"></div>
-                        <button id="close-hint-btn" style="margin-top:10px;background:#ede9fe;color:#7c3aed;border:none;border-radius:7px;padding:5px 16px;font-weight:500;cursor:pointer;">Đóng</button>
+                        <button id="close-hint-btn"
+                            style="margin-top:10px;background:#ede9fe;color:#7c3aed;border:none;border-radius:7px;padding:5px 16px;font-weight:500;cursor:pointer;">Đóng</button>
                     </div>
                 </div>
                 <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
-                    <input type="text" id="en-answer-input" placeholder="Nhập câu tiếng Anh của bạn..." style="flex:1;font-size:1rem;padding:7px 10px;border-radius:7px;border:1px solid #a78bfa;" />
-                    <button id="send-translate-btn" style="font-size:1rem;padding:7px 18px;border-radius:7px;background:linear-gradient(90deg,#a78bfa 0%,#7c3aed 100%);color:#fff;font-weight:600;border:none;">Gửi</button>
-                    <button id="next-vi-btn" style="font-size:1rem;padding:7px 14px;border-radius:7px;background:#e1f5fe;color:#7c3aed;font-weight:600;border:none;">Câu tiếp theo</button>
+                    <input type="text" id="en-answer-input" placeholder="Nhập câu tiếng Anh của bạn..."
+                        style="flex:1;font-size:1rem;padding:7px 10px;border-radius:7px;border:1px solid #a78bfa;" />
+                    <button id="send-translate-btn"
+                        style="font-size:1rem;padding:7px 18px;border-radius:7px;background:linear-gradient(90deg,#a78bfa 0%,#7c3aed 100%);color:#fff;font-weight:600;border:none;">Gửi</button>
+                    <button id="next-vi-btn"
+                        style="font-size:1rem;padding:7px 14px;border-radius:7px;background:#e1f5fe;color:#7c3aed;font-weight:600;border:none;">Câu
+                        tiếp theo</button>
                 </div>
-            <div id="translate-feedback" style="min-height:40px;margin-bottom:10px;"></div>
-            <div id="translate-next-box" style="color:#7c3aed;font-size:0.98rem;text-align:center;"></div>
-            <div style="display:flex;gap:18px;margin-top:18px;align-items:flex-start;">
-                <div id="paragraph-view" style="flex:1;min-width:0;padding:12px 10px;background:#f3f4f6;border-radius:8px;"></div>
-                <div id="translate-history-list" style="flex:1;min-width:0;"></div>
-            </div>
+                <div id="translate-feedback" style="min-height:40px;margin-bottom:10px;"></div>
+                <div id="translate-next-box" style="color:#7c3aed;font-size:0.98rem;text-align:center;"></div>
+                <div style="display:flex;gap:18px;margin-top:18px;align-items:flex-start;">
+                    <div id="paragraph-view"
+                        style="flex:1;min-width:0;padding:12px 10px;background:#f3f4f6;border-radius:8px;"></div>
+                    <div id="translate-history-list" style="flex:1;min-width:0;"></div>
+                </div>
             </div>
         </div>
         <footer>
@@ -229,22 +383,155 @@
         </footer>
     </div>
     <script>
-        // Khi click vào nút Quiz, mở modal Quiz
-        document.getElementById('quiz-btn').onclick = function() {
+        // Hàm ẩn tất cả container chức năng
+        function hideAllContainers() {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('chat-container').style.display = 'none';
+            document.getElementById('translate-container').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('vocab-container').style.display = 'none';
+            document.getElementById('listening-container').style.display = 'none';
+            document.getElementById('quiz-modal').style.display = 'none';
+            document.getElementById('translate-modal').style.display = 'none';
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        }
+
+        // Sự kiện cho sidebar
+        document.getElementById('home-btn').onclick = function () {
+            hideAllContainers();
+            document.getElementById('home-page').style.display = 'block';
+        };
+        document.getElementById('practice-grammar-btn').onclick = function () {
+            hideAllContainers();
+            document.getElementById('chat-container').style.display = 'block';
+        };
+        document.getElementById('practice-translate-btn').onclick = function () {
+            hideAllContainers();
+            document.getElementById('translate-modal').style.display = 'block';
+        };
+        document.getElementById('vocab-btn').onclick = function () {
+            hideAllContainers();
+            document.getElementById('vocab-container').style.display = 'block';
+        };
+        document.getElementById('quiz-btn').onclick = function () {
+            hideAllContainers();
             document.getElementById('quiz-modal').style.display = 'flex';
         };
-        document.getElementById('close-quiz-modal').onclick = function() {
+        document.getElementById('listening-btn').onclick = function () {
+            hideAllContainers();
+            document.getElementById('listening-container').style.display = 'block';
+            document.getElementById('listening-question-box').textContent = '';
+            document.getElementById('listening-audio-box').innerHTML = '';
+            document.getElementById('listening-answer-input').value = '';
+            document.getElementById('listening-feedback').textContent = '';
+        };
+
+        let currentListening = null;
+
+        document.getElementById('start-listening-btn').onclick = async function () {
+            const topic = document.getElementById('listening-topic-select').value;
+            const band = document.getElementById('listening-band-select').value;
+            document.getElementById('listening-question-box').textContent = 'Đang tạo câu hỏi luyện nghe...';
+            document.getElementById('listening-audio-box').innerHTML = '';
+            document.getElementById('listening-answer-input').value = '';
+            document.getElementById('listening-feedback').textContent = '';
+            try {
+                // Gọi API tạo câu hỏi luyện nghe
+                const resp = await fetch('http://127.0.0.1:8000/api/generate-listening', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ topic, band })
+                });
+                if (!resp.ok) throw new Error('API lỗi');
+                const data = await resp.json();
+                // data: {text: '...', answer: '...', audioUrl: '...'}
+                currentListening = data;
+                document.getElementById('listening-question-box').textContent = `Chủ đề: ${topic}, Band: ${band}`;
+                document.getElementById('listening-audio-box').innerHTML = `<button id='play-listening-audio' style='background:#7c3aed;color:#fff;border:none;border-radius:50%;width:48px;height:48px;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 8px #ede9fe33;cursor:pointer;'><svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24'><path fill='#fff' d='M8 5v14l11-7z'/></svg></button>`;
+                setTimeout(() => {
+                    const playBtn = document.getElementById('play-listening-audio');
+                    if (playBtn) {
+                        playBtn.onclick = function () {
+                            if (currentListening.audioUrl) {
+                                const audio = new Audio(currentListening.audioUrl);
+                                audio.play();
+                            } else if ('speechSynthesis' in window && currentListening.text) {
+                                const utter = new SpeechSynthesisUtterance(currentListening.text);
+                                utter.lang = 'en-US';
+                                window.speechSynthesis.speak(utter);
+                            }
+                        };
+                    }
+                }, 100);
+            } catch (e) {
+                document.getElementById('listening-question-box').textContent = 'Lỗi tạo câu hỏi luyện nghe.';
+            }
+        };
+
+        document.getElementById('check-listening-btn').onclick = function () {
+            if (!currentListening) return;
+            const userAns = document.getElementById('listening-answer-input').value.trim();
+            if (!userAns) {
+                document.getElementById('listening-feedback').textContent = 'Bạn cần nhập đáp án.';
+                return;
+            }
+            // So sánh không phân biệt dấu câu
+            function normalize(str) {
+                // Loại bỏ dấu câu, chuẩn hóa số, khoảng trắng
+                let s = str.toLowerCase().replace(/[.,!?;:]/g, '').replace(/\s+/g, ' ').trim();
+                // Chuyển đổi các số thành chữ (ví dụ: 7 -> seven, 8 -> eight)
+                s = s.replace(/\b0\b/g, 'zero')
+                    .replace(/\b1\b/g, 'one')
+                    .replace(/\b2\b/g, 'two')
+                    .replace(/\b3\b/g, 'three')
+                    .replace(/\b4\b/g, 'four')
+                    .replace(/\b5\b/g, 'five')
+                    .replace(/\b6\b/g, 'six')
+                    .replace(/\b7\b/g, 'seven')
+                    .replace(/\b8\b/g, 'eight')
+                    .replace(/\b9\b/g, 'nine');
+                // Chuẩn hóa a.m./am, p.m./pm
+                s = s.replace(/a\.m\.|am/g, 'am').replace(/p\.m\.|pm/g, 'pm');
+                return s;
+            }
+            if (normalize(userAns) === normalize(currentListening.answer || '')) {
+                document.getElementById('listening-feedback').textContent = '✅ Chính xác!';
+            } else {
+                document.getElementById('listening-feedback').textContent = `❌ Sai. Đáp án đúng: ${currentListening.answer || ''}`;
+            }
+        };
+        // Hiển thị nút scroll lên đầu trang khi cuộn xuống
+        const scrollBtn = document.getElementById('scroll-top-btn');
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 180) {
+                scrollBtn.style.display = 'flex';
+                scrollBtn.style.opacity = '1';
+            } else {
+                scrollBtn.style.opacity = '0';
+                setTimeout(() => { scrollBtn.style.display = 'none'; }, 180);
+            }
+        });
+        scrollBtn.onclick = function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        // Khi click vào nút Quiz, mở modal Quiz
+        document.getElementById('quiz-btn').onclick = function () {
+            hideAllContainers();
+            document.getElementById('quiz-modal').style.display = 'flex';
+        };
+        document.getElementById('close-quiz-modal').onclick = function () {
             document.getElementById('quiz-modal').style.display = 'none';
         };
         // Luyện dịch chủ đề: mở modal chọn chủ đề/mức độ
-        document.getElementById('practice-translate-btn').onclick = function() {
+        document.getElementById('practice-translate-btn').onclick = function () {
+            hideAllContainers();
             document.getElementById('translate-modal').style.display = 'block';
             // Ẩn tạm box Chủ đề | Mức độ khi mở modal
             document.getElementById('translate-info').style.visibility = 'hidden';
             // Ẩn quiz nếu đang mở
             document.getElementById('quiz-container').style.display = 'none';
         };
-        document.getElementById('close-translate-modal').onclick = function() {
+        document.getElementById('close-translate-modal').onclick = function () {
             document.getElementById('translate-modal').style.display = 'none';
             // Hiện lại box Chủ đề | Mức độ nếu có nội dung
             if (document.getElementById('translate-info').innerHTML.trim() !== '') {
@@ -252,20 +539,20 @@
             }
         };
         // Chuyển đổi giữa chọn chủ đề có sẵn và tự nhập
-        document.getElementById('topic-mode-select').onchange = function() {
+        document.getElementById('topic-mode-select').onchange = function () {
             if (this.checked) {
                 document.getElementById('topic-select-box').style.display = 'block';
                 document.getElementById('custom-topic-box').style.display = 'none';
             }
         };
-        document.getElementById('topic-mode-custom').onchange = function() {
+        document.getElementById('topic-mode-custom').onchange = function () {
             if (this.checked) {
                 document.getElementById('topic-select-box').style.display = 'none';
                 document.getElementById('custom-topic-box').style.display = 'block';
                 document.getElementById('custom-topic-input').focus();
             }
         };
-        document.getElementById('start-translate-btn').onclick = async function() {
+        document.getElementById('start-translate-btn').onclick = async function () {
             // Khi bắt đầu chủ đề mới, reset box
             document.getElementById('translate-info').style.visibility = 'visible';
             // Ẩn modal, hiển thị giao diện luyện dịch
@@ -282,11 +569,11 @@
             }
             const level = document.getElementById('level-select').value;
             // Hiển thị thông tin chủ đề, mức độ
-            const topicMap = {travel:'Du lịch',school:'Học tập',work:'Công việc',family:'Gia đình',food:'Ẩm thực'};
-            const levelMap = {easy:'Dễ',medium:'Trung bình',hard:'Khó'};
+            const topicMap = { travel: 'Du lịch', school: 'Học tập', work: 'Công việc', family: 'Gia đình', food: 'Ẩm thực' };
+            const levelMap = { easy: 'Dễ', medium: 'Trung bình', hard: 'Khó' };
             document.getElementById('translate-info').innerHTML =
-                `<div class='translate-info-topic'><span class='info-icon'>📚</span>Chủ đề: <span>${topicMap[topic]||topic}</span></div>` +
-                `<div class='translate-info-level'><span class='info-icon'>⭐</span>Mức độ: <span>${levelMap[level]||level}</span></div>`;
+                `<div class='translate-info-topic'><span class='info-icon'>📚</span>Chủ đề: <span>${topicMap[topic] || topic}</span></div>` +
+                `<div class='translate-info-level'><span class='info-icon'>⭐</span>Mức độ: <span>${levelMap[level] || level}</span></div>`;
             // Gọi backend lấy câu tiếng Việt đầu tiên
             document.getElementById('vi-sentence-box').textContent = 'Đang lấy câu...';
             document.getElementById('en-answer-input').value = '';
@@ -311,197 +598,335 @@
             }
         };
         // Quiz logic
-const quizModal = document.getElementById('quiz-modal');
-const quizContainer = document.getElementById('quiz-container');
-const startQuizBtn = document.getElementById('start-quiz-btn');
-const quizProgress = document.getElementById('quiz-progress');
-const quizQuestionBox = document.getElementById('quiz-question-box');
-const quizAnswersForm = document.getElementById('quiz-answers-form');
-const quizNextBtn = document.getElementById('quiz-next-btn');
-const quizSubmitBtn = document.getElementById('quiz-submit-btn');
-const quizResultBox = document.getElementById('quiz-result-box');
+        const quizModal = document.getElementById('quiz-modal');
+        const quizContainer = document.getElementById('quiz-container');
+        const startQuizBtn = document.getElementById('start-quiz-btn');
+        const quizProgress = document.getElementById('quiz-progress');
+        const quizQuestionBox = document.getElementById('quiz-question-box');
+        const quizAnswersForm = document.getElementById('quiz-answers-form');
+        const quizNextBtn = document.getElementById('quiz-next-btn');
+        const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+        const quizResultBox = document.getElementById('quiz-result-box');
 
-let quizState = null;
-let readingPassage = '';
-let quizTopic = '';
-let quizLevel = '';
+        let quizState = null;
+        let readingPassage = '';
+        let quizTopic = '';
+        let quizLevel = '';
 
-startQuizBtn.onclick = async function() {
-    // Lấy chủ đề và mức độ
-    const topic = document.getElementById('quiz-topic-select').value;
-    const level = document.getElementById('quiz-level-select').value;
-    quizTopic = topic;
-    quizLevel = level;
-    quizModal.style.display = 'none';
-    document.getElementById('home-page').style.display = 'none';
-    document.getElementById('chat-container').style.display = 'none';
-    document.getElementById('translate-container').style.display = 'none';
-    quizContainer.style.display = 'block';
-    quizResultBox.innerHTML = '';
-    quizProgress.textContent = '';
-    quizQuestionBox.textContent = '';
-    quizAnswersForm.innerHTML = '';
-    quizNextBtn.style.display = 'none';
-    quizSubmitBtn.style.display = 'none';
-    readingPassage = '';
-    if (topic === 'reading') {
-        // Chỉ hiển thị "Đang tạo đoạn đọc hiểu..."
-        quizProgress.textContent = '';
-        quizQuestionBox.innerHTML = `<div style='text-align:center;font-size:1.1em;color:#7c3aed;font-weight:600;margin:32px 0;'>Đang tạo đoạn đọc hiểu...</div>`;
-        quizAnswersForm.innerHTML = '';
-        quizNextBtn.style.display = 'none';
-        quizSubmitBtn.style.display = 'none';
-        try {
-            // Chỉ gửi level lên backend
-            const resPassage = await fetch('http://127.0.0.1:8000/reading/passage', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ level })
+        startQuizBtn.onclick = async function () {
+            // Lấy chủ đề và mức độ
+            const topic = document.getElementById('quiz-topic-select').value;
+            const level = document.getElementById('quiz-level-select').value;
+            quizTopic = topic;
+            quizLevel = level;
+            quizModal.style.display = 'none';
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('chat-container').style.display = 'none';
+            document.getElementById('translate-container').style.display = 'none';
+            document.getElementById('vocab-container').style.display = 'none'; // Ẩn container từ vựng khi bắt đầu quiz
+            quizContainer.style.display = 'block';
+            quizResultBox.innerHTML = '';
+            quizProgress.textContent = '';
+            quizQuestionBox.textContent = '';
+            quizAnswersForm.innerHTML = '';
+            quizNextBtn.style.display = 'none';
+            quizSubmitBtn.style.display = 'none';
+            readingPassage = '';
+            if (topic === 'reading') {
+                // Chỉ hiển thị "Đang tạo đoạn đọc hiểu..."
+                quizProgress.textContent = '';
+                quizQuestionBox.innerHTML = `<div style='text-align:center;font-size:1.1em;color:#7c3aed;font-weight:600;margin:32px 0;'>Đang tạo đoạn đọc hiểu...</div>`;
+                quizAnswersForm.innerHTML = '';
+                quizNextBtn.style.display = 'none';
+                quizSubmitBtn.style.display = 'none';
+                try {
+                    // Chỉ gửi level lên backend
+                    const resPassage = await fetch('http://127.0.0.1:8000/reading/passage', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ level })
+                    });
+                    const dataPassage = await resPassage.json();
+                    readingPassage = dataPassage.passage || '';
+                    if (!readingPassage) {
+                        quizQuestionBox.innerHTML = `<div style='color:#ef4444;'>Không tạo được đoạn đọc hiểu.</div>`;
+                        return;
+                    }
+                    // Sau khi có passage, tiếp tục lấy quiz như cũ
+                } catch (e) {
+                    quizQuestionBox.innerHTML = `<div style='color:#ef4444;'>Lỗi tạo đoạn đọc hiểu.</div>`;
+                    return;
+                }
+            }
+            // Gọi API lấy quiz, nếu là reading thì gửi kèm passage
+            try {
+                const res = await fetch('http://127.0.0.1:8000/quiz/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(topic === 'reading' ? { topic, level, num_questions: 5, passage: readingPassage } : { topic, level, num_questions: 5 })
+                });
+                const data = await res.json();
+                if (!data.questions || !Array.isArray(data.questions) || data.questions.length === 0) {
+                    quizProgress.textContent = 'Không có câu hỏi quiz phù hợp.';
+                    return;
+                }
+                quizState = {
+                    questions: data.questions,
+                    current: 0,
+                    answers: Array(data.questions.length).fill(null)
+                };
+                renderQuizQuestion();
+            } catch (e) {
+                quizProgress.textContent = 'Lỗi lấy quiz từ server.';
+            }
+        };
+
+        function renderQuizQuestion() {
+            if (!quizState) return;
+            const idx = quizState.current;
+            const q = quizState.questions[idx];
+            quizProgress.textContent = `Câu ${idx + 1} / ${quizState.questions.length}`;
+            // Hiển thị thông tin topic và level
+            let topicText = '';
+            let levelText = '';
+            const topicMap = { grammar: 'Ngữ pháp', vocabulary: 'Từ vựng', reading: 'Đọc hiểu' };
+            topicText = topicMap[quizTopic] || quizTopic;
+            levelText = quizLevel ? `Band ${quizLevel}` : '';
+            let infoHtml = `<div style='margin-bottom:8px;font-size:1.05em;color:#7c3aed;font-weight:600;'>Chủ đề: <span style='color:#2563eb;'>${topicText}</span> &nbsp; | &nbsp; Mức độ: <span style='color:#d97706;'>${levelText}</span></div>`;
+            // Nếu là reading, luôn hiển thị toàn bộ passage khi làm quiz
+            if (quizTopic === 'reading' && readingPassage) {
+                // Thêm icon loa phát âm cho đoạn đọc hiểu và câu hỏi tiếng Anh
+                // Tách đoạn đọc hiểu thành từng từ, mỗi từ trong một span
+                // Tách đoạn đọc hiểu thành từng từ, mỗi từ trong một span, đồng thời lưu vị trí bắt đầu của từng từ
+                function wrapPassageWords(text) {
+                    let wordStarts = [];
+                    let html = '';
+                    let idx = 0;
+                    let re = /\S+/g;
+                    let match;
+                    while ((match = re.exec(text)) !== null) {
+                        let word = match[0];
+                        let start = match.index;
+                        wordStarts.push({ start, word });
+                    }
+                    let lastIdx = 0;
+                    wordStarts.forEach((w, i) => {
+                        // Thêm khoảng trắng giữa các từ
+                        html += text.slice(lastIdx, w.start);
+                        html += `<span class='reading-word' data-idx='${i}' data-start='${w.start}'>${w.word}</span>`;
+                        lastIdx = w.start + w.word.length;
+                    });
+                    html += text.slice(lastIdx);
+                    return html.replace(/\n/g, '<br>');
+                }
+                quizQuestionBox.innerHTML = infoHtml +
+                    `<div style='background:#f1f5f9;padding:14px 12px;border-radius:8px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px;'>
+                <div style='flex:1;'>
+                    <b>Đoạn đọc hiểu:</b><br><span id='reading-passage-text'>${wrapPassageWords(readingPassage)}</span>
+                </div>
+                <button id='reading-passage-speak-btn' style='background:none;border:none;cursor:pointer;padding:0;margin:0;vertical-align:middle;display:inline-flex;align-items:center;' title='Nghe phát âm đoạn đọc'>
+                    <svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' style='vertical-align:middle;'>
+                        <path fill='#3b82f6' d='M3 10v4h4l5 5V5L7 10H3zm13.5 2c0-1.77-1.02-3.29-2.5-4.03v8.06c1.48-.74 2.5-2.26 2.5-4.03zm2.5 0c0 3.04-1.64 5.64-4.5 6.32v-2.02c2.01-.45 3.5-2.24 3.5-4.3s-1.49-3.85-3.5-4.3V5.68c2.86.68 4.5 3.28 4.5 6.32z'/>
+                    </svg>
+                </button>
+                <button id='reading-passage-pause-btn' style='background:none;border:none;cursor:pointer;padding:0 0 0 8px;margin:0;vertical-align:middle;display:inline-flex;align-items:center;' title='Tạm dừng/tiếp tục phát âm'>
+                    <svg id='pause-icon' xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24'><rect x='6' y='5' width='4' height='14' fill='#f59e42'/><rect x='14' y='5' width='4' height='14' fill='#f59e42'/></svg>
+                    <svg id='resume-icon' xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' style='display:none;'><polygon points='8,5 19,12 8,19' fill='#10b981'/></svg>
+                </button>
+            </div>` +
+                    `<div style='display:flex;align-items:center;gap:8px;justify-content:flex-start;margin-bottom:8px;'>
+                <span style='font-size:1.13em;font-weight:600;color:#222;'>${q.question}</span>
+                <button class='quiz-speak-btn' style='background:none;border:none;cursor:pointer;padding:0;margin:0;vertical-align:middle;display:inline-flex;align-items:center;' title='Nghe phát âm'>
+                    <svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' style='vertical-align:middle;'>
+                        <path fill='#3b82f6' d='M3 10v4h4l5 5V5L7 10H3zm13.5 2c0-1.77-1.02-3.29-2.5-4.03v8.06c1.48-.74 2.5-2.26 2.5-4.03zm2.5 0c0 3.04-1.64 5.64-4.5 6.32v-2.02c2.01-.45 3.5-2.24 3.5-4.3s-1.49-3.85-3.5-4.3V5.68c2.86.68 4.5 3.28 4.5 6.32z'/>
+                    </svg>
+                </button>
+            </div>`;
+                // Gán sự kiện phát âm cho icon loa đoạn đọc hiểu
+                setTimeout(() => {
+                    const passageBtn = document.getElementById('reading-passage-speak-btn');
+                    const passageTextEl = document.getElementById('reading-passage-text');
+                    if (passageBtn && passageTextEl) {
+                        let currentUtter = null;
+                        let isPaused = false;
+                        const pauseBtn = document.getElementById('reading-passage-pause-btn');
+                        const pauseIcon = document.getElementById('pause-icon');
+                        const resumeIcon = document.getElementById('resume-icon');
+                        passageBtn.onclick = function () {
+                            let text = passageTextEl.textContent || passageTextEl.innerText || '';
+                            if (text && 'speechSynthesis' in window) {
+                                window.speechSynthesis.cancel();
+                                passageTextEl.querySelectorAll('.reading-word').forEach(span => span.classList.remove('highlight'));
+                                let spans = passageTextEl.querySelectorAll('.reading-word');
+                                let starts = Array.from(spans).map(span => parseInt(span.getAttribute('data-start')));
+                                const utter = new SpeechSynthesisUtterance(text);
+                                utter.lang = 'en-US';
+                                utter.onboundary = function (e) {
+                                    if (e.name === 'word') {
+                                        let idx = e.charIndex;
+                                        let found = -1;
+                                        for (let i = 0; i < starts.length; i++) {
+                                            if (starts[i] <= idx) found = i;
+                                            else break;
+                                        }
+                                        if (found >= 0) {
+                                            spans.forEach(s => s.classList.remove('highlight'));
+                                            spans[found].classList.add('highlight');
+                                        }
+                                    }
+                                };
+                                utter.onend = function () {
+                                    passageTextEl.querySelectorAll('.reading-word').forEach(span => span.classList.remove('highlight'));
+                                    pauseIcon.style.display = '';
+                                    resumeIcon.style.display = 'none';
+                                    isPaused = false;
+                                    currentUtter = null;
+                                };
+                                currentUtter = utter;
+                                window.speechSynthesis.speak(utter);
+                                pauseIcon.style.display = '';
+                                resumeIcon.style.display = 'none';
+                                isPaused = false;
+                            }
+                        };
+                        if (pauseBtn) {
+                            pauseBtn.onclick = function () {
+                                if (!currentUtter) return;
+                                if (!isPaused) {
+                                    window.speechSynthesis.pause();
+                                    pauseIcon.style.display = 'none';
+                                    resumeIcon.style.display = '';
+                                    isPaused = true;
+                                } else {
+                                    window.speechSynthesis.resume();
+                                    pauseIcon.style.display = '';
+                                    resumeIcon.style.display = 'none';
+                                    isPaused = false;
+                                }
+                            };
+                        }
+                    }
+                }, 10);
+            } else {
+                quizQuestionBox.innerHTML = infoHtml +
+                    `<div style='display:flex;align-items:center;gap:8px;justify-content:flex-start;margin-bottom:8px;'>
+                <span style='font-size:1.13em;font-weight:600;color:#222;'>${q.question}</span>
+                <button class='quiz-speak-btn' style='background:none;border:none;cursor:pointer;padding:0;margin:0;vertical-align:middle;display:inline-flex;align-items:center;' title='Nghe phát âm'>
+                    <svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' style='vertical-align:middle;'>
+                        <path fill='#3b82f6' d='M3 10v4h4l5 5V5L7 10H3zm13.5 2c0-1.77-1.02-3.29-2.5-4.03v8.06c1.48-.74 2.5-2.26 2.5-4.03zm2.5 0c0 3.04-1.64 5.64-4.5 6.32v-2.02c2.01-.45 3.5-2.24 3.5-4.3s-1.49-3.85-3.5-4.3V5.68c2.86.68 4.5 3.28 4.5 6.32z'/>
+                    </svg>
+                </button>
+            </div>`;
+            }
+            quizAnswersForm.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const id = `quiz-opt-${idx}-${i}`;
+                const checked = quizState.answers[idx] === i ? 'checked' : '';
+                quizAnswersForm.innerHTML += `<label style='display:block;margin-bottom:7px;cursor:pointer;'><input type='radio' name='quiz-answer' value='${i}' id='${id}' ${checked}> ${opt}</label>`;
             });
-            const dataPassage = await resPassage.json();
-            readingPassage = dataPassage.passage || '';
-            if (!readingPassage) {
-                quizQuestionBox.innerHTML = `<div style='color:#ef4444;'>Không tạo được đoạn đọc hiểu.</div>`;
+            quizNextBtn.style.display = (idx < quizState.questions.length - 1) ? 'inline-block' : 'none';
+            quizSubmitBtn.style.display = (idx === quizState.questions.length - 1) ? 'inline-block' : 'none';
+            quizResultBox.innerHTML = '';
+            // Gán sự kiện phát âm cho icon loa
+            setTimeout(() => {
+                const speakBtns = document.getElementsByClassName('quiz-speak-btn');
+                for (const btn of speakBtns) {
+                    btn.onclick = function () {
+                        let text = '';
+                        // Lấy nội dung câu hỏi
+                        const span = btn.parentNode.querySelector('span');
+                        if (span) text = span.textContent;
+                        if (text && 'speechSynthesis' in window) {
+                            window.speechSynthesis.cancel(); // Dừng phát âm cũ trước khi phát câu mới
+                            const utter = new SpeechSynthesisUtterance(text);
+                            utter.lang = 'en-US';
+                            window.speechSynthesis.speak(utter);
+                        }
+                    };
+                }
+            }, 10);
+        }
+
+        quizAnswersForm.onchange = function (e) {
+            if (!quizState) return;
+            const idx = quizState.current;
+            if (e.target && e.target.name === 'quiz-answer') {
+                quizState.answers[idx] = parseInt(e.target.value);
+            }
+        };
+
+        quizNextBtn.onclick = function () {
+            if (!quizState) return;
+            if (quizState.answers[quizState.current] == null) {
+                quizResultBox.innerHTML = '<span style="color:#ef4444;">Bạn cần chọn đáp án trước khi sang câu tiếp theo.</span>';
                 return;
             }
-            // Sau khi có passage, tiếp tục lấy quiz như cũ
-        } catch (e) {
-            quizQuestionBox.innerHTML = `<div style='color:#ef4444;'>Lỗi tạo đoạn đọc hiểu.</div>`;
-            return;
-        }
-    }
-    // Gọi API lấy quiz, nếu là reading thì gửi kèm passage
-    try {
-        const res = await fetch('http://127.0.0.1:8000/quiz/start', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(topic === 'reading' ? { topic, level, num_questions: 5, passage: readingPassage } : { topic, level, num_questions: 5 })
-        });
-        const data = await res.json();
-        if (!data.questions || !Array.isArray(data.questions) || data.questions.length === 0) {
-            quizProgress.textContent = 'Không có câu hỏi quiz phù hợp.';
-            return;
-        }
-        quizState = {
-            questions: data.questions,
-            current: 0,
-            answers: Array(data.questions.length).fill(null)
+            quizState.current++;
+            renderQuizQuestion();
         };
-        renderQuizQuestion();
-    } catch (e) {
-        quizProgress.textContent = 'Lỗi lấy quiz từ server.';
-    }
-};
 
-function renderQuizQuestion() {
-    if (!quizState) return;
-    const idx = quizState.current;
-    const q = quizState.questions[idx];
-    quizProgress.textContent = `Câu ${idx+1} / ${quizState.questions.length}`;
-    // Hiển thị thông tin topic và level
-    let topicText = '';
-    let levelText = '';
-    const topicMap = {grammar:'Ngữ pháp', vocabulary:'Từ vựng', reading:'Đọc hiểu'};
-    topicText = topicMap[quizTopic] || quizTopic;
-    levelText = quizLevel ? `Band ${quizLevel}` : '';
-    let infoHtml = `<div style='margin-bottom:8px;font-size:1.05em;color:#7c3aed;font-weight:600;'>Chủ đề: <span style='color:#2563eb;'>${topicText}</span> &nbsp; | &nbsp; Mức độ: <span style='color:#d97706;'>${levelText}</span></div>`;
-    // Nếu là reading, luôn hiển thị toàn bộ passage khi làm quiz
-    if (quizTopic === 'reading' && readingPassage) {
-        quizQuestionBox.innerHTML = infoHtml + `<div style='background:#f1f5f9;padding:14px 12px;border-radius:8px;margin-bottom:16px;'><b>Đoạn đọc hiểu:</b><br>${readingPassage.replace(/\n/g,'<br>')}</div>` + q.question;
-    } else {
-        quizQuestionBox.innerHTML = infoHtml + q.question;
-    }
-    quizAnswersForm.innerHTML = '';
-    q.options.forEach((opt, i) => {
-        const id = `quiz-opt-${idx}-${i}`;
-        const checked = quizState.answers[idx] === i ? 'checked' : '';
-        quizAnswersForm.innerHTML += `<label style='display:block;margin-bottom:7px;cursor:pointer;'><input type='radio' name='quiz-answer' value='${i}' id='${id}' ${checked}> ${opt}</label>`;
-    });
-    quizNextBtn.style.display = (idx < quizState.questions.length - 1) ? 'inline-block' : 'none';
-    quizSubmitBtn.style.display = (idx === quizState.questions.length - 1) ? 'inline-block' : 'none';
-    quizResultBox.innerHTML = '';
-}
-
-quizAnswersForm.onchange = function(e) {
-    if (!quizState) return;
-    const idx = quizState.current;
-    if (e.target && e.target.name === 'quiz-answer') {
-        quizState.answers[idx] = parseInt(e.target.value);
-    }
-};
-
-quizNextBtn.onclick = function() {
-    if (!quizState) return;
-    if (quizState.answers[quizState.current] == null) {
-        quizResultBox.innerHTML = '<span style="color:#ef4444;">Bạn cần chọn đáp án trước khi sang câu tiếp theo.</span>';
-        return;
-    }
-    quizState.current++;
-    renderQuizQuestion();
-};
-
-quizSubmitBtn.onclick = function() {
-    if (!quizState) return;
-    if (quizState.answers[quizState.current] == null) {
-        quizResultBox.innerHTML = '<span style="color:#ef4444;">Bạn cần chọn đáp án trước khi nộp bài.</span>';
-        return;
-    }
-    // Ẩn câu hỏi và đáp án khi nộp bài
-    quizQuestionBox.innerHTML = '';
-    quizAnswersForm.innerHTML = '';
-    let correct = 0;
-    let html = '<h3>Kết quả Quiz</h3>';
-    quizState.questions.forEach((q, i) => {
-        const userAns = quizState.answers[i];
-        const isCorrect = userAns === q.answer;
-        if (isCorrect) correct++;
-        let passageHtml = readingPassage;
-        let evidenceHtml = '';
-        if (q.evidence && readingPassage) {
-            const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            let ev = q.evidence.trim();
-            let regex = new RegExp(esc(ev), 'gi');
-            // Nếu không tìm thấy, thử bỏ dấu câu cuối
-            if (!passageHtml.match(regex)) {
-                ev = ev.replace(/[.,!?]$/, '');
-                // Chấp nhận evidence kết thúc bằng dấu chấm, phẩy, hoặc không có dấu
-                regex = new RegExp(esc(ev) + '[.,!?]?', 'gi');
+        quizSubmitBtn.onclick = function () {
+            if (!quizState) return;
+            if (quizState.answers[quizState.current] == null) {
+                quizResultBox.innerHTML = '<span style="color:#ef4444;">Bạn cần chọn đáp án trước khi nộp bài.</span>';
+                return;
             }
-            passageHtml = passageHtml.replace(regex, match => `<span class="highlight">${match}</span>`);
-            evidenceHtml = `<div style='color:#2563eb;font-size:0.98em;margin-top:4px;'>Đoạn mô tả liên quan: <span class="highlight">${q.evidence}</span></div>`;
-        }
-        html += `<div style='margin-bottom:10px;padding:8px 10px;background:#fff;border-radius:7px;box-shadow:0 1px 4px #ede9fe22;'>` +
-            (readingPassage ? `<div style='background:#f1f5f9;padding:10px 10px;border-radius:7px;margin-bottom:8px;'><b>Đoạn đọc hiểu:</b><br>${passageHtml.replace(/\n/g,'<br>')}</div>` : '') +
-            `<div style='font-weight:600;color:#7c3aed;'>Câu ${i+1}: ${q.question}</div>` +
-            `<div>Đáp án của bạn: <b style='color:${isCorrect ? '#059669':'#ef4444'};'>${q.options[userAns] ?? '-'}</b></div>` +
-            `<div>Đáp án đúng: <b style='color:#2563eb;'>${q.options[q.answer]}</b></div>` +
-            `<div style='color:#d97706;'>Giải thích: ${q.explain || '-'}</div>` +
-            evidenceHtml +
-        `</div>`;
-    });
-    html = `<div style='font-size:1.15em;font-weight:700;margin-bottom:12px;'>Bạn đúng ${correct}/${quizState.questions.length} câu</div>` + html;
-    // Thêm nút làm lại và làm mới quiz
-    html += `<div style='margin-top:18px;display:flex;gap:12px;justify-content:center;'>` +
-        `<button id='quiz-retry-btn' style='padding:7px 18px;border-radius:7px;background:#ede9fe;color:#7c3aed;font-weight:600;border:none;'>Làm lại quiz này</button>` +
-        `<button id='quiz-new-btn' style='padding:7px 18px;border-radius:7px;background:linear-gradient(90deg,#a78bfa 0%,#7c3aed 100%);color:#fff;font-weight:600;border:none;'>Làm quiz mới</button>` +
-        `</div>`;
-    quizResultBox.innerHTML = html;
-    quizNextBtn.style.display = 'none';
-    quizSubmitBtn.style.display = 'none';
-    quizProgress.textContent = 'Đã hoàn thành Quiz!';
-    // Sự kiện cho nút làm lại quiz
-    document.getElementById('quiz-retry-btn').onclick = function() {
-        quizState.current = 0;
-        quizState.answers = Array(quizState.questions.length).fill(null);
-        renderQuizQuestion();
-    };
-    // Sự kiện cho nút làm quiz mới
-    document.getElementById('quiz-new-btn').onclick = function() {
-        quizContainer.style.display = 'none';
-        quizResultBox.innerHTML = '';
-        document.getElementById('quiz-modal').style.display = 'flex';
-    };
-};
+            // Ẩn câu hỏi và đáp án khi nộp bài
+            quizQuestionBox.innerHTML = '';
+            quizAnswersForm.innerHTML = '';
+            let correct = 0;
+            let html = '<h3>Kết quả Quiz</h3>';
+            quizState.questions.forEach((q, i) => {
+                const userAns = quizState.answers[i];
+                const isCorrect = userAns === q.answer;
+                if (isCorrect) correct++;
+                let passageHtml = readingPassage;
+                let evidenceHtml = '';
+                if (q.evidence && readingPassage) {
+                    const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    let ev = q.evidence.trim();
+                    let regex = new RegExp(esc(ev), 'gi');
+                    // Nếu không tìm thấy, thử bỏ dấu câu cuối
+                    if (!passageHtml.match(regex)) {
+                        ev = ev.replace(/[.,!?]$/, '');
+                        // Chấp nhận evidence kết thúc bằng dấu chấm, phẩy, hoặc không có dấu
+                        regex = new RegExp(esc(ev) + '[.,!?]?', 'gi');
+                    }
+                    passageHtml = passageHtml.replace(regex, match => `<span class="highlight">${match}</span>`);
+                    evidenceHtml = `<div style='color:#2563eb;font-size:0.98em;margin-top:4px;'>Đoạn mô tả liên quan: <span class="highlight">${q.evidence}</span></div>`;
+                }
+                html += `<div style='margin-bottom:10px;padding:8px 10px;background:#fff;border-radius:7px;box-shadow:0 1px 4px #ede9fe22;'>` +
+                    (readingPassage ? `<div style='background:#f1f5f9;padding:10px 10px;border-radius:7px;margin-bottom:8px;'><b>Đoạn đọc hiểu:</b><br>${passageHtml.replace(/\n/g, '<br>')}</div>` : '') +
+                    `<div style='font-weight:600;color:#7c3aed;'>Câu ${i + 1}: ${q.question}</div>` +
+                    `<div>Đáp án của bạn: <b style='color:${isCorrect ? '#059669' : '#ef4444'};'>${q.options[userAns] ?? '-'}</b></div>` +
+                    `<div>Đáp án đúng: <b style='color:#2563eb;'>${q.options[q.answer]}</b></div>` +
+                    `<div style='color:#d97706;'>Giải thích: ${q.explain || '-'}</div>` +
+                    evidenceHtml +
+                    `</div>`;
+            });
+            html = `<div style='font-size:1.15em;font-weight:700;margin-bottom:12px;'>Bạn đúng ${correct}/${quizState.questions.length} câu</div>` + html;
+            // Thêm nút làm lại và làm mới quiz
+            html += `<div style='margin-top:18px;display:flex;gap:12px;justify-content:center;'>` +
+                `<button id='quiz-retry-btn' style='padding:7px 18px;border-radius:7px;background:#ede9fe;color:#7c3aed;font-weight:600;border:none;'>Làm lại quiz này</button>` +
+                `<button id='quiz-new-btn' style='padding:7px 18px;border-radius:7px;background:linear-gradient(90deg,#a78bfa 0%,#7c3aed 100%);color:#fff;font-weight:600;border:none;'>Làm quiz mới</button>` +
+                `</div>`;
+            quizResultBox.innerHTML = html;
+            quizNextBtn.style.display = 'none';
+            quizSubmitBtn.style.display = 'none';
+            quizProgress.textContent = 'Đã hoàn thành Quiz!';
+            // Sự kiện cho nút làm lại quiz
+            document.getElementById('quiz-retry-btn').onclick = function () {
+                quizState.current = 0;
+                quizState.answers = Array(quizState.questions.length).fill(null);
+                renderQuizQuestion();
+            };
+            // Sự kiện cho nút làm quiz mới
+            document.getElementById('quiz-new-btn').onclick = function () {
+                quizContainer.style.display = 'none';
+                quizResultBox.innerHTML = '';
+                document.getElementById('quiz-modal').style.display = 'flex';
+            };
+        };
         // Xử lý gửi câu dịch, chấm điểm và lấy câu tiếp theo
         // Hàm parseFeedback: ưu tiên parse JSON, fallback sang text nếu cần
         function parseFeedback(feedback, userAnswer) {
@@ -530,7 +955,7 @@ quizSubmitBtn.onclick = function() {
             return { user, correct, score, explanation };
         }
 
-        document.getElementById('send-translate-btn').onclick = async function() {
+        document.getElementById('send-translate-btn').onclick = async function () {
             const userAnswer = document.getElementById('en-answer-input').value.trim();
             if (!userAnswer) return;
             const state = window.translateState;
@@ -571,11 +996,11 @@ quizSubmitBtn.onclick = function() {
                 let formatted = explanation || '';
                 if (formatted) {
                     // Thay **...** thành <span class='highlight'>...</span>
-                    formatted = formatted.replace(/\*\*(.+?)\*\*/g, function(match, p1) {
+                    formatted = formatted.replace(/\*\*(.+?)\*\*/g, function (match, p1) {
                         return '<span class="highlight">' + p1 + '</span>';
                     });
                     // Làm nổi bật số thứ tự đầu dòng (1., 2., ...)
-                    formatted = formatted.replace(/(\n|^)(\d+\.)/g, function(match, p1, p2) {
+                    formatted = formatted.replace(/(\n|^)(\d+\.)/g, function (match, p1, p2) {
                         return '<br><span class="highlight">' + p2 + '</span>';
                     });
                     // Tự động xuống dòng trước mỗi đoạn highlight (nếu cần)
@@ -605,13 +1030,13 @@ quizSubmitBtn.onclick = function() {
                     `<div style='color:#2563eb;font-weight:500;margin-top:2px;'>Bạn: ${history[i].en}</div>` +
                     `<div style='color:#059669;font-weight:500;margin-top:2px;'>Đúng: ${correctDisplay}</div>` +
                     `<div style='color:#d97706;font-weight:500;margin-top:2px;'>⭐ Điểm: ${scoreDisplay}</div>` +
-                `</div>`;
+                    `</div>`;
             }
             box.innerHTML = html;
         }
 
         // Nút Câu tiếp theo: lấy câu mới từ backend
-        document.getElementById('next-vi-btn').onclick = async function() {
+        document.getElementById('next-vi-btn').onclick = async function () {
             const state = window.translateState;
             if (!state || !state.topic || !state.level) return;
             document.getElementById('vi-sentence-box').textContent = 'Đang lấy câu...';
@@ -622,7 +1047,7 @@ quizSubmitBtn.onclick = function() {
             try {
                 // Gửi toàn bộ đoạn đã dịch (song ngữ) lên backend để AI sinh câu mới nối tiếp
                 const bilingualHistory = state.history_bilingual || [];
-                const paragraph = bilingualHistory.map(item => ({vi: item.vi, en: item.en}));
+                const paragraph = bilingualHistory.map(item => ({ vi: item.vi, en: item.en }));
                 const res = await fetch('http://127.0.0.1:8000/translate/start', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -660,29 +1085,162 @@ quizSubmitBtn.onclick = function() {
         const homeBtn = document.getElementById('home-btn');
         const practiceGrammarBtn = document.getElementById('practice-grammar-btn');
 
-        // Sự kiện cho nút Trang chủ
-        homeBtn.onclick = function() {
-            // Hiện trang chủ, ẩn các phần khác
-            homePage.style.display = 'block';
-            chatContainer.style.display = 'none';
+        // Hàm ẩn tất cả container chức năng
+        function hideAllContainers() {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('chat-container').style.display = 'none';
             document.getElementById('translate-container').style.display = 'none';
-            // Ẩn quiz nếu đang mở
             document.getElementById('quiz-container').style.display = 'none';
-            // Ẩn modal nếu đang mở
+            document.getElementById('vocab-container').style.display = 'none';
+            document.getElementById('listening-container').style.display = 'none';
+            document.getElementById('quiz-modal').style.display = 'none';
             document.getElementById('translate-modal').style.display = 'none';
-            // Ẩn popup gợi ý nếu đang mở
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        }
+
+        // Sự kiện cho nút Trang chủ
+
+        homeBtn.onclick = function () {
+            hideAllContainers();
+            document.getElementById('home-page').style.display = 'block';
+        };
+
+        practiceGrammarBtn.onclick = function () {
+            hideAllContainers();
+            document.getElementById('chat-container').style.display = 'block';
             document.getElementById('hint-popup').style.display = 'none';
         };
 
+        document.getElementById('practice-translate-btn').onclick = function () {
+            hideAllContainers();
+            document.getElementById('translate-modal').style.display = 'block';
+        };
+
+    document.getElementById('vocab-btn').onclick = function () {
+            hideAllContainers();
+            document.getElementById('vocab-container').style.display = 'block';
+        };
+
+    document.getElementById('quiz-btn').onclick = function () {
+            hideAllContainers();
+            document.getElementById('quiz-modal').style.display = 'flex';
+        };
+
+    document.getElementById('listening-btn').onclick = function () {
+            hideAllContainers();
+            document.getElementById('listening-container').style.display = 'block';
+            document.getElementById('listening-question-box').textContent = '';
+            document.getElementById('listening-audio-box').innerHTML = '';
+            document.getElementById('listening-answer-input').value = '';
+            document.getElementById('listening-feedback').textContent = '';
+        };
+
         // Sự kiện cho nút Luyện tập sửa ngữ pháp
-        practiceGrammarBtn.onclick = function() {
-            homePage.style.display = 'none';
+        practiceGrammarBtn.onclick = function () {
+            hideAllContainers();
             chatContainer.style.display = 'block';
-            document.getElementById('translate-container').style.display = 'none';
-            // Ẩn quiz nếu đang mở
-            document.getElementById('quiz-container').style.display = 'none';
-            document.getElementById('translate-modal').style.display = 'none';
             document.getElementById('hint-popup').style.display = 'none';
+        };
+        // --- Flashcard Vocabulary Logic ---
+        // Danh sách từ vựng mẫu
+        const defaultVocabs = [
+            { word: 'cat', meaning: 'con mèo', phonetic: '/kæt/', image: 'https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=200&q=80' },
+            { word: 'dog', meaning: 'con chó', phonetic: '/dɒg/', image: 'https://images.unsplash.com/photo-1518715308788-300e1e1b8a49?auto=format&fit=crop&w=200&q=80' },
+            // Hình mới cho "dog"
+            // { word: 'dog', meaning: 'con chó', phonetic: '/dɒg/', image: 'https://images.unsplash.com/photo-1518715308788-300e1e1b8a49?auto=format&fit=crop&w=200&q=80' },
+            { word: 'dog', meaning: 'con chó', phonetic: '/dɒg/', image: 'https://images.unsplash.com/photo-1518715308788-52b6b2a7c8a5?auto=format&fit=crop&w=200&q=80' },
+            { word: 'apple', meaning: 'quả táo', phonetic: '/ˈæp.əl/', image: 'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=200&q=80' },
+            { word: 'book', meaning: 'quyển sách', phonetic: '/bʊk/', image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=200&q=80' }
+        ];
+        let vocabList = [];
+        let vocabIndex = 0;
+
+        // Hàm render flashcard
+        function renderVocabFlashcard() {
+            console.log('renderVocabFlashcard', {vocabList, vocabIndex, defaultVocabs});
+            if (!Array.isArray(vocabList) || vocabList.length === 0) {
+                vocabList = [...defaultVocabs];
+                vocabIndex = 0;
+            }
+            if (!vocabList || vocabList.length === 0) {
+                document.getElementById('vocab-word').textContent = 'Không có từ vựng.';
+                document.getElementById('vocab-meaning').textContent = '';
+                document.getElementById('vocab-phonetic').textContent = '';
+                document.getElementById('vocab-progress').textContent = '';
+                // Hide image on back
+                if (document.getElementById('vocab-image-back')) document.getElementById('vocab-image-back').style.display = 'none';
+                return;
+            }
+            const v = vocabList[vocabIndex];
+            document.getElementById('vocab-word').textContent = v.word;
+            // Cập nhật nút phát âm
+            const speakBtn = document.getElementById('vocab-speak-btn');
+            if (speakBtn) {
+                speakBtn.onclick = function () {
+                    if ('speechSynthesis' in window) {
+                        const utter = new SpeechSynthesisUtterance(v.word);
+                        utter.lang = 'en-US';
+                        window.speechSynthesis.speak(utter);
+                    } else {
+                        alert('Trình duyệt của bạn không hỗ trợ phát âm!');
+                    }
+                };
+            }
+            document.getElementById('vocab-meaning').textContent = v.meaning;
+            document.getElementById('vocab-phonetic').textContent = v.phonetic || '';
+            document.getElementById('vocab-progress').textContent = `Từ ${vocabIndex + 1} / ${vocabList.length}`;
+            // Show image only on back
+            let imgBackEl = document.getElementById('vocab-image-back');
+            if (!imgBackEl) {
+                imgBackEl = document.createElement('img');
+                imgBackEl.id = 'vocab-image-back';
+                imgBackEl.style.display = 'block';
+                imgBackEl.style.margin = '0 auto 10px auto';
+                imgBackEl.style.maxWidth = '90px';
+                imgBackEl.style.maxHeight = '90px';
+                imgBackEl.style.borderRadius = '12px';
+                imgBackEl.style.boxShadow = '0 2px 8px #ede9fe55';
+                const meaningDiv = document.getElementById('vocab-meaning');
+                if (meaningDiv) meaningDiv.parentNode.insertBefore(imgBackEl, meaningDiv);
+            }
+            if (v.image) {
+                imgBackEl.src = v.image;
+                imgBackEl.alt = v.word;
+                imgBackEl.style.display = 'block';
+            } else {
+                imgBackEl.style.display = 'none';
+            }
+            // Reset flip
+            document.getElementById('vocab-flip-inner').classList.remove('flipped');
+        }
+
+        // Sự kiện cho nút Luyện từ vựng
+        document.getElementById('vocab-btn').onclick = function () {
+            hideAllContainers();
+            document.getElementById('vocab-container').style.display = 'block';
+            vocabList = [...defaultVocabs];
+            vocabIndex = 0;
+            renderVocabFlashcard();
+        };
+
+        // Sự kiện lật flashcard
+        document.getElementById('show-meaning-btn').onclick = function () {
+            document.getElementById('vocab-flip-inner').classList.add('flipped');
+        };
+        document.getElementById('flip-back-btn').onclick = function () {
+            document.getElementById('vocab-flip-inner').classList.remove('flipped');
+        };
+
+        // Sự kiện chuyển từ vựng
+        document.getElementById('next-vocab-btn').onclick = function () {
+            if (vocabList.length === 0) return;
+            vocabIndex = (vocabIndex + 1) % vocabList.length;
+            renderVocabFlashcard();
+        };
+        document.getElementById('prev-vocab-btn').onclick = function () {
+            if (vocabList.length === 0) return;
+            vocabIndex = (vocabIndex - 1 + vocabList.length) % vocabList.length;
+            renderVocabFlashcard();
         };
 
         function appendMessage(text, sender) {
@@ -702,7 +1260,7 @@ quizSubmitBtn.onclick = function() {
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        sendBtn.onclick = async function() {
+        sendBtn.onclick = async function () {
             const text = userInput.value.trim();
             if (!text) return;
             appendMessage(text, 'user');
@@ -724,16 +1282,16 @@ quizSubmitBtn.onclick = function() {
             }
         };
 
-        userInput.addEventListener('keydown', function(e) {
+        userInput.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') sendBtn.click();
         });
 
         // Nút đóng popup gợi ý
-        document.getElementById('close-hint-btn').onclick = function() {
+        document.getElementById('close-hint-btn').onclick = function () {
             document.getElementById('hint-popup').style.display = 'none';
         };
         // Đóng popup gợi ý khi click ra ngoài
-        document.addEventListener('mousedown', function(event) {
+        document.addEventListener('mousedown', function (event) {
             const hintPopup = document.getElementById('hint-popup');
             const showHintBtn = document.getElementById('show-hint-btn');
             if (!hintPopup || hintPopup.style.display === 'none') return;
@@ -742,7 +1300,7 @@ quizSubmitBtn.onclick = function() {
             }
         });
         // Sidebar navigation logic
-        document.getElementById('show-hint-btn').onclick = function() {
+        document.getElementById('show-hint-btn').onclick = function () {
             const state = window.translateState;
             let vi = state && state.currentVi ? state.currentVi : '';
             let hintContent = document.getElementById('hint-content');
@@ -758,35 +1316,35 @@ quizSubmitBtn.onclick = function() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ vi_sentence: vi })
             })
-            .then(res => res.json())
-            .then(data => {
-                if (!data || !data.hints || !Array.isArray(data.hints) || data.hints.length === 0) {
-                    hintContent.innerHTML = '<i>Không có gợi ý đặc biệt cho câu này.</i>';
-                    return;
-                }
-                let html = '<ul style="padding-left:18px;margin:0;">';
-                for (const h of data.hints) {
-                    if (h.word) {
-                        html += `<li><b>${h.word}</b> <span style='color:#666;font-size:0.98em;margin-left:6px;'>${h.vi}</span></li>`;
-                    } else if (h.grammar) {
-                        html += `<li><b>${h.grammar}</b> <span style='color:#666;font-size:0.98em;margin-left:6px;'>${h.vi}</span></li>`;
-                    } else if (h.info) {
-                        html += `<li style='color:#888;'>${h.info}</li>`;
+                .then(res => res.json())
+                .then(data => {
+                    if (!data || !data.hints || !Array.isArray(data.hints) || data.hints.length === 0) {
+                        hintContent.innerHTML = '<i>Không có gợi ý đặc biệt cho câu này.</i>';
+                        return;
                     }
-                }
-                html += '</ul>';
-                hintContent.innerHTML = html;
-            })
-            .catch(() => {
-                hintContent.innerHTML = '<span style="color:#ef4444;">Lỗi lấy gợi ý từ server.</span>';
-            });
+                    let html = '<ul style="padding-left:18px;margin:0;">';
+                    for (const h of data.hints) {
+                        if (h.word) {
+                            html += `<li><b>${h.word}</b> <span style='color:#666;font-size:0.98em;margin-left:6px;'>${h.vi}</span></li>`;
+                        } else if (h.grammar) {
+                            html += `<li><b>${h.grammar}</b> <span style='color:#666;font-size:0.98em;margin-left:6px;'>${h.vi}</span></li>`;
+                        } else if (h.info) {
+                            html += `<li style='color:#888;'>${h.info}</li>`;
+                        }
+                    }
+                    html += '</ul>';
+                    hintContent.innerHTML = html;
+                })
+                .catch(() => {
+                    hintContent.innerHTML = '<span style="color:#ef4444;">Lỗi lấy gợi ý từ server.</span>';
+                });
         };
         // Ẩn/hiện sidebar khi nhấn vào sidebar-toggle
         const sidebarEl = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebar-toggle');
         const sidebarOpenBtn = document.getElementById('sidebar-open-btn');
 
-        sidebarToggle.onclick = function() {
+        sidebarToggle.onclick = function () {
             // Toggle class để ẩn/hiện sidebar
             if (!sidebarEl.classList.contains('sidebar-collapsed')) {
                 sidebarEl.classList.add('sidebar-collapsed');
@@ -798,20 +1356,14 @@ quizSubmitBtn.onclick = function() {
         };
 
         // Nút mở lại sidebar
-        sidebarOpenBtn.onclick = function() {
+        sidebarOpenBtn.onclick = function () {
             sidebarEl.classList.remove('sidebar-collapsed');
             sidebarOpenBtn.style.display = 'none';
         };
     </script>
     <style>
-.highlight {
-    background: #fffbe6;
-    color: #d97706;
-    font-weight: bold;
-    padding: 1px 5px;
-    border-radius: 5px;
-    box-shadow: 0 1px 4px #fde68a55;
-}
-</style>
+        /* ...existing code... */
+    </style>
 </body>
+
 </html>
