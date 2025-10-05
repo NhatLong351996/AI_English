@@ -236,6 +236,8 @@ class HintItem(BaseModel):
     grammar: str = None
     vi: str = None
     info: str = None
+    pronunciation: str = None  # Thêm phiên âm
+    pos: str = None  # Thêm từ loại (part of speech)
 
 @app.post("/translate/hint")
 async def translate_hint(req: HintRequest):
@@ -244,8 +246,10 @@ async def translate_hint(req: HintRequest):
         return {"hints": [{"info": "Không có câu để gợi ý."}]}
     # Prompt tối ưu: yêu cầu AI liệt kê từ vựng, cấu trúc ngữ pháp cần dùng để viết đúng câu tiếng Anh
     system_prompt = (
-        "Bạn là giáo viên tiếng Anh. Hãy phân tích câu tiếng Việt sau và liệt kê các từ vựng quan trọng (word), cấu trúc ngữ pháp cần sử dụng (grammar) để viết đúng câu tiếng Anh tương ứng. "
-        "Mỗi gợi ý là 1 object JSON với các trường: 'word' (từ/cụm từ), 'grammar' (cấu trúc), 'vi' (giải thích ngắn gọn bằng tiếng Việt). Nếu không có gợi ý đặc biệt, trả về mảng rỗng. Không giải thích thêm ngoài JSON."
+        "Bạn là giáo viên tiếng Anh. Hãy phân tích câu tiếng Việt sau và liệt kê các từ vựng tiếng Anh quan trọng (word), cấu trúc ngữ pháp tiếng Anh cần sử dụng (grammar) để viết đúng câu tiếng Anh tương ứng. "
+        "Mỗi gợi ý là 1 object JSON với các trường: 'word' (từ/cụm từ TIẾNG ANH), 'pos' (từ loại viết tắt: n, v, adj, adv, prep, conj, etc.), 'pronunciation' (phiên âm IPA), 'grammar' (cấu trúc TIẾNG ANH), 'vi' (giải thích ngắn gọn bằng tiếng Việt). "
+        "Ví dụ: [{\"word\": \"dolphin\", \"pos\": \"n\", \"pronunciation\": \"/ˈdɒlfɪn/\", \"vi\": \"cá heo\"}, {\"word\": \"intelligent\", \"pos\": \"adj\", \"pronunciation\": \"/ɪnˈtelɪdʒənt/\", \"vi\": \"thông minh\"}, {\"grammar\": \"be + adjective\", \"vi\": \"cấu trúc tính từ\"}]. "
+        "Nếu không có gợi ý đặc biệt, trả về mảng rỗng. Chỉ trả về JSON array, không giải thích thêm."
     )
     user_prompt = f"Câu tiếng Việt: {vi_sentence}\nHãy trả về JSON array như hướng dẫn."
     try:
@@ -279,9 +283,13 @@ async def translate_hint(req: HintRequest):
                 key = key.strip().lower()
                 val = val.strip()
                 if key in ['từ vựng', 'từ', 'cụm từ', 'từ/cụm từ', 'word']:
-                    parsed.append({"word": val, "vi": val})
+                    # Tìm từ tiếng Anh trong val
+                    english_word = val.split('(')[0].strip() if '(' in val else val
+                    parsed.append({"word": english_word, "vi": f"từ vựng: {val}"})
                 elif key in ['ngữ pháp', 'cấu trúc', 'grammar']:
-                    parsed.append({"grammar": val, "vi": val})
+                    # Tìm cấu trúc tiếng Anh trong val
+                    english_grammar = val.split('(')[0].strip() if '(' in val else val
+                    parsed.append({"grammar": english_grammar, "vi": f"cấu trúc: {val}"})
                 else:
                     parsed.append({"info": line})
             else:
@@ -505,3 +513,64 @@ async def generate_listening(req: ListeningRequest):
 @app.post("/api/generate-listening")
 async def get_listening_info():
     return {"message": "Vui lòng sử dụng phương thức POST để tạo câu luyện nghe."}
+
+# --- IELTS Vocabulary Extraction API ---
+from fastapi import Request
+class IELTSVocabRequest(BaseModel):
+    passage: str
+    level: Optional[str] = None
+
+class IELTSVocabWord(BaseModel):
+    word: str
+    meaning: str
+    part_of_speech: str
+    phonetic: str
+    example: str
+    analysis: str
+
+class IELTSVocabResponse(BaseModel):
+    vocab: List[IELTSVocabWord]
+
+@app.post("/api/ielts-vocab", response_model=IELTSVocabResponse)
+async def ielts_vocab(req: IELTSVocabRequest):
+    passage = req.passage
+    level = req.level or "all"
+    system_prompt = (
+        "Bạn là giáo viên luyện thi IELTS. Dưới đây là một đoạn đọc hiểu tiếng Anh (Reading passage):\n" + passage + "\n"
+        "Hãy phân tích đoạn văn trên và chỉ trích xuất các từ vựng thực sự phổ biến trong kỳ thi IELTS (high-frequency IELTS vocabulary, academic word list, hoặc các từ thường xuất hiện trong đề thi IELTS band 5-9). "
+        "Bỏ qua các từ thông dụng, từ không phải từ vựng học thuật IELTS. Không chọn các từ như: the, and, is, are, have, do, go, come, get, make, take, see, say, can, will, should, must, may, might, would, could, shall, to, of, in, on, at, for, with, by, from, as, but, or, if, so, because, very, really, just, only, also, too, more, most, much, many, some, any, every, each, all, no, not, nor, neither, either, both, few, little, less, least, enough, again, always, never, sometimes, often, usually, rarely, seldom, ever, never, before, after, then, now, soon, later, today, tomorrow, yesterday, here, there, where, when, why, how, what, which, who, whom, whose, this, that, these, those, I, you, he, she, it, we, they, me, him, her, us, them, my, your, his, her, its, our, their, mine, yours, hers, ours, theirs, a, an. "
+        "Chỉ chọn các từ academic, collocation, hoặc technical thường gặp trong đề IELTS. "
+        "Với mỗi từ vựng, hãy trả về thông tin sau: word (từ), meaning (nghĩa tiếng Việt), part_of_speech (loại từ), phonetic (phiên âm IPA), example (ví dụ sử dụng từ trong ngữ cảnh đoạn văn), analysis (giải thích ngắn gọn về ý nghĩa/ngữ cảnh sử dụng từ trong đoạn). "
+        "Chỉ trả về một mảng JSON các object như sau: {word, meaning, part_of_speech, phonetic, example, analysis}. Không giải thích gì ngoài JSON."
+    )
+    try:
+        response = client.chat.completions.create(
+            model=deployment_name,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": "Hãy trích xuất từ vựng IELTS từ đoạn văn trên."}
+            ],
+            max_tokens=1200,
+            temperature=0.7
+        )
+        import json, re
+        content = response.choices[0].message.content
+        match = re.search(r'(\[.*\])', content, re.DOTALL)
+        vocab_list = []
+        if match:
+            arr = match.group(1)
+            vocab_list = json.loads(arr)
+        # Chuyển đổi sang định dạng chuẩn
+        result = []
+        for v in vocab_list:
+            result.append({
+                "word": v.get("word", ""),
+                "meaning": v.get("meaning", ""),
+                "part_of_speech": v.get("part_of_speech", ""),
+                "phonetic": v.get("phonetic", ""),
+                "example": v.get("example", ""),
+                "analysis": v.get("analysis", "")
+            })
+        return {"vocab": result}
+    except Exception as e:
+        return {"vocab": []}

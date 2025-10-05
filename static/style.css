@@ -724,3 +724,41 @@ footer { background: #f3f0ff; color: #7c3aed; text-align: center; padding: 14px 
     z-index: 3;
     position: relative;
 }
+
+/* Custom scrollbar for hint popup */
+#hint-popup::-webkit-scrollbar {
+    width: 8px;
+}
+#hint-popup::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+#hint-popup::-webkit-scrollbar-thumb {
+    background: #a78bfa;
+    border-radius: 4px;
+}
+#hint-popup::-webkit-scrollbar-thumb:hover {
+    background: #7c3aed;
+}
+
+/* Bounce animation for cute icons */
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-12px) scale(1.15);
+    }
+}
+
+.cute-anim-icon {
+    will-change: transform;
+    filter: drop-shadow(0 2px 6px #ede9fe);
+}
+
+/* Fixed header for hint popup */
+#hint-popup[style*="display:block"],
+#hint-popup[style*="display: block"] {
+    display: flex !important;
+    flex-direction: column;
+}
