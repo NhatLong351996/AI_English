@@ -1,3 +1,243 @@
+/* New Header Design - Static Position */
+.app-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative; /* Static positioning - no overlap */
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: 32px;
+}
+
+/* Header Logo Section */
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 280px;
+}
+
+.logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: logoSpin 6s linear infinite;
+}
+
+.logo-text h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.logo-text p {
+    margin: 4px 0 0 0;
+    font-size: 0.85rem;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+/* Header Stats */
+.header-stats {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 12px 16px;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    min-width: 100px;
+}
+
+.stat-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.stat-number {
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    font-weight: 500;
+}
+
+/* Header Actions */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.action-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 8px 16px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.user-info:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes logoSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .header-stats {
+        gap: 16px;
+    }
+    
+    .stat-card {
+        padding: 10px 12px;
+        min-width: 80px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        padding: 16px 20px;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+    
+    .header-stats {
+        display: none;
+    }
+    
+    .header-actions {
+        gap: 8px;
+    }
+    
+    .user-name {
+        display: none;
+    }
+    
+    .logo-text h1 {
+        font-size: 1.2rem;
+    }
+    
+    .logo-text p {
+        font-size: 0.8rem;
+    }
+}
+
+/* Dark Theme Support */
+.dark-theme .app-header {
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+}
+
+.dark-theme .stat-card,
+.dark-theme .action-btn,
+.dark-theme .user-info {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark-theme .stat-card:hover,
+.dark-theme .action-btn:hover,
+.dark-theme .user-info:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Reading words - clickable for vocabulary popup */
+.reading-word {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    padding: 1px 2px;
+    position: relative;
+}
+
+.reading-word:hover {
+    background: linear-gradient(90deg, #f3e8ff 0%, #e9d5ff 100%);
+    color: #7c3aed;
+    text-decoration: underline;
+    text-decoration-color: #7c3aed;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(124, 58, 237, 0.2);
+}
+
 /* Highlight từ đang đọc trong đoạn đọc hiểu */
 .reading-word.highlight {
     background: linear-gradient(90deg,#fef3c7 0%,#fcd34d 100%);
@@ -761,4 +1001,70 @@ footer { background: #f3f0ff; color: #7c3aed; text-align: center; padding: 14px 
 #hint-popup[style*="display: block"] {
     display: flex !important;
     flex-direction: column;
+}
+
+/* Resize handle for hint popup */
+#resize-handle:hover {
+    opacity: 1 !important;
+}
+
+/* Reading word hover tooltip */
+.reading-word-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2937;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 2000;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: none;
+    max-width: 250px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.4;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.reading-word-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #1f2937;
+}
+
+.reading-word-tooltip.tooltip-bottom {
+    top: calc(100% + 8px);
+    bottom: auto;
+}
+
+.reading-word-tooltip.tooltip-bottom::after {
+    top: -6px;
+    border-top-color: transparent;
+    border-bottom-color: #1f2937;
+}
+
+/* Dark theme support for tooltip */
+body.dark-theme .reading-word-tooltip {
+    background: #374151;
+    color: #f9fafb;
+}
+
+body.dark-theme .reading-word-tooltip::after {
+    border-top-color: #374151;
+}
+
+body.dark-theme .reading-word-tooltip.tooltip-bottom::after {
+    border-bottom-color: #374151;
+    border-top-color: transparent;
 }

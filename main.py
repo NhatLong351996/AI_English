@@ -108,6 +108,86 @@ TRANSLATE_DATA = {
     },
     # ... các chủ đề khác tương tự ...
 }
+
+# Simple word translation endpoint for hover tooltips
+class SimpleTranslateRequest(BaseModel):
+    text: str
+    topic: str = "vocabulary"
+    level: str = "basic"
+
+class TranslateHint(BaseModel):
+    word: str
+    meaning: str
+    pronunciation: str = ""
+    type: str = "vocabulary"
+
+class SimpleTranslateResponse(BaseModel):
+    hints: List[TranslateHint]
+
+@app.post("/translate", response_model=SimpleTranslateResponse)
+async def translate_word(req: SimpleTranslateRequest):
+    """
+    Endpoint đơn giản để dịch từ cho hover tooltip
+    """
+    import traceback
+    word = req.text.strip().lower()
+    
+    try:
+        print(f"[DEBUG] /translate request for word: '{word}', topic: {req.topic}, level: {req.level}")
+        
+        # Validate input
+        if not word or len(word) == 0:
+            print("[ERROR] /translate empty word")
+            return {"hints": []}
+        
+        # Simple word translation using AI
+        system_prompt = (
+            f"Bạn là từ điển tiếng Anh - Việt chuyên nghiệp. Hãy dịch từ '{word}' sang tiếng Việt.\n"
+            "Yêu cầu:\n"
+            "- Trả về nghĩa chính xác nhất, phổ biến nhất\n"
+            "- Nghĩa phải ngắn gọn (1-4 từ), dễ hiểu\n"
+            "- Chỉ trả về nghĩa tiếng Việt, không giải thích thêm\n"
+            "- Nếu là từ rất cơ bản (a, an, the, is, are...) thì trả về nghĩa đơn giản nhất"
+        )
+        
+        response = client.chat.completions.create(
+            model=deployment_name,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Dịch từ: {word}"}
+            ],
+            max_tokens=50,
+            temperature=0.1  # Giảm temperature để ổn định hơn
+        )
+        
+        meaning = response.choices[0].message.content.strip()
+        print(f"[DEBUG] /translate AI response for '{word}': {meaning}")
+        
+        # Clean up the meaning
+        if meaning.startswith('"') and meaning.endswith('"'):
+            meaning = meaning[1:-1]
+        
+        # Create response
+        hints = [TranslateHint(
+            word=word,
+            meaning=meaning or word,  # Fallback to original word if empty
+            pronunciation="",
+            type="vocabulary"
+        )]
+        
+        return {"hints": hints}
+        
+    except Exception as e:
+        print(f"[ERROR] /translate error for word '{word}': {e}")
+        traceback.print_exc()
+        # Fallback response
+        return {"hints": [TranslateHint(
+            word=word,
+            meaning=word,  # Show original word as fallback
+            pronunciation="",
+            type="vocabulary"
+        )]}
+
 @app.post("/translate/start", response_model=TranslateResponse)
 async def translate_start(req: TranslateStartRequest):
     topic = req.topic
@@ -430,6 +510,7 @@ class ReadingPassageRequest(BaseModel):
 
 class ReadingPassageResponse(BaseModel):
     passage: str
+    vocabulary: dict = {}  # Thêm từ điển nghĩa của các từ
 
 @app.post("/reading/passage", response_model=ReadingPassageResponse)
 async def reading_passage(req: ReadingPassageRequest):
@@ -438,10 +519,166 @@ async def reading_passage(req: ReadingPassageRequest):
     print("========== [READING PASSAGE REQUEST] ==========")
     print(f"[RECEIVED LEVEL]: {level}")
     # ...existing code...
+    
+    # Điều chỉnh độ dài theo band điểm
+    word_counts = {
+        '5.0': '80-120 từ',
+        '5.5': '100-150 từ', 
+        '6.0': '130-180 từ',
+        '6.5': '160-220 từ',
+        '7.0': '200-280 từ',
+        '7.5': '250-350 từ',
+        '8.0': '300-400 từ',
+        '8.5': '350-450 từ',
+        '9.0': '400-500 từ'
+    }
+    
+    # Lấy độ dài tương ứng với level, mặc định medium nếu không tìm thấy
+    word_range = word_counts.get(level, '150-200 từ')
+    
+    # Chủ đề IELTS Reading đa dạng theo band điểm - Mở rộng toàn diện
+    ielts_topics_by_band = {
+        # Band 1.0-3.5: Chủ đề cơ bản, quen thuộc trong đời sống hàng ngày
+        'basic': [
+            # Cuộc sống hàng ngày
+            "daily routines and lifestyle", "family and friends", "food and cooking",
+            "pets and animals", "weather and seasons", "shopping and clothes",
+            "house and home", "school life", "hobbies and free time",
+            "transportation and travel", "sports and games", "festivals and celebrations",
+            
+            # Cơ bản về công việc và sức khỏe
+            "work and jobs", "health and medicine", "numbers and time",
+            "colors and shapes", "body parts", "simple technology use",
+            
+            # Giải trí và hoạt động
+            "playground activities", "birthday parties", "weekend plans",
+            "favorite foods", "my bedroom", "visiting relatives",
+            "playing with friends", "going to the park", "watching TV",
+            
+            # Thiên nhiên và môi trường đơn giản
+            "flowers and plants", "ocean and beach", "mountains and forests",
+            "rain and sunshine", "birds and insects", "caring for plants"
+        ],
+        
+        # Band 4.0-5.5: Chủ đề thông dụng, dễ hiểu, liên quan đời sống thực tế
+        'intermediate': [
+            # Xã hội và văn hóa
+            "city life vs countryside", "popular sports and fitness", "movies and entertainment",
+            "social media and internet", "environmental problems", "healthy eating habits",
+            "education and learning", "tourism and holidays", "money and shopping",
+            "friendship and relationships", "music and art", "books and reading",
+            
+            # Công nghệ và giao tiếp
+            "computers and smartphones", "public transport", "restaurants and cafes",
+            "weekend activities", "cultural differences", "news and media",
+            "online learning", "video games", "photography",
+            
+            # Đời sống đô thị
+            "apartment living", "neighborhood community", "local markets",
+            "traffic and commuting", "recycling and waste", "volunteer work",
+            "part-time jobs", "university life", "fashion trends",
+            
+            # Sở thích và kỹ năng
+            "learning musical instruments", "cooking techniques", "gardening tips",
+            "exercise routines", "time management", "budgeting money",
+            "language exchange", "cultural festivals", "travel experiences"
+        ],
+        
+        # Band 6.0-7.0: Chủ đề phức tạp hơn, xã hội và khoa học ứng dụng
+        'advanced': [
+            # Quy hoạch và phát triển
+            "urban planning and cities", "climate change effects", "workplace trends",
+            "cultural diversity", "technology in education", "healthcare systems",
+            "sustainable living", "economic development", "social media impacts",
+            
+            # Năng lượng và môi trường
+            "renewable energy basics", "population changes", "language learning",
+            "business and marketing", "scientific discoveries", "historical events",
+            "innovation and invention", "global communication", "youth culture",
+            
+            # Tâm lý và xã hội học
+            "stress management", "work-life balance", "digital addiction",
+            "generational gaps", "consumer psychology", "urban agriculture",
+            "sustainable fashion", "food security", "mental health awareness",
+            
+            # Giáo dục và công nghệ
+            "online education trends", "artificial intelligence basics", "data privacy",
+            "startup culture", "remote working", "environmental conservation",
+            "cultural preservation", "tourism impacts", "media influence",
+            
+            # Khoa học ứng dụng
+            "medical breakthroughs", "space technology", "robotics applications",
+            "genetic research basics", "archaeological findings", "weather patterns"
+        ],
+        
+        # Band 7.5-9.0: Chủ đề academic, chuyên sâu và nghiên cứu khoa học
+        'expert': [
+            # Công nghệ tiên tiến
+            "artificial intelligence and automation", "biotechnology and genetics",
+            "quantum computing applications", "nanotechnology research",
+            "cybersecurity and digital privacy", "blockchain technology",
+            "virtual reality applications", "autonomous vehicles",
+            
+            # Khoa học tự nhiên
+            "space exploration and astronomy", "neuroscience and brain research",
+            "marine science and oceans", "geological formations",
+            "pharmaceutical research", "climate modeling",
+            "biodiversity conservation", "ecosystem dynamics",
+            
+            # Khoa học xã hội và nhân văn
+            "psychological studies", "economic theories", "political science",
+            "anthropological research", "linguistic evolution",
+            "cultural anthropology", "social psychology", "behavioral economics",
+            
+            # Nghiên cứu chuyên sâu
+            "archaeological discoveries", "historical linguistics",
+            "architectural design principles", "urban sociology",
+            "environmental engineering", "renewable vs fossil fuels",
+            "international trade policies", "demographic transitions",
+            
+            # Lĩnh vực đa ngành
+            "interdisciplinary research", "systems thinking",
+            "computational biology", "environmental economics",
+            "medical anthropology", "cognitive science",
+            "materials science", "energy policy analysis",
+            "sustainable development goals", "global governance"
+        ]
+    }
+    
+    # Chọn chủ đề phù hợp với band điểm
+    def get_topic_by_band(level):
+        try:
+            band_score = float(level)
+            if band_score <= 3.5:
+                return random.choice(ielts_topics_by_band['basic'])
+            elif band_score <= 5.5:
+                return random.choice(ielts_topics_by_band['intermediate'])
+            elif band_score <= 7.0:
+                return random.choice(ielts_topics_by_band['advanced'])
+            else:
+                return random.choice(ielts_topics_by_band['expert'])
+        except:
+            return random.choice(ielts_topics_by_band['intermediate'])
+    
+    import random
+    selected_topic = get_topic_by_band(level)
+    
     system_prompt = (
-        f"Bạn là giáo viên luyện thi IELTS. Hãy tạo ra một đoạn đọc hiểu tiếng Anh (Reading passage) phù hợp với đề thi IELTS, độ dài khoảng 80-120 từ. "
-        f"Yêu cầu: Độ khó, từ vựng, cấu trúc ngữ pháp, chủ đề và cách diễn đạt phải tương ứng với band điểm IELTS {level}. "
-        "Đoạn văn phải tự nhiên, có thể có các chi tiết gây nhiễu như đề thi thật. Không giải thích, chỉ trả về đoạn văn tiếng Anh. Đảm bảo số từ không vượt quá 120 từ."
+        f"Bạn là Cambridge IELTS examiner. Hãy tạo Reading passage theo chuẩn IELTS Academic, độ dài {word_range}.\n"
+        f"Chủ đề: {selected_topic}\n"
+        f"Band điểm: {level}\n\n"
+        "YÊU CẦU THEO BAND ĐIỂM:\n"
+        f"- Band 1.0-3.5: Văn bản đơn giản, từ vựng cơ bản, câu ngắn, chủ đề quen thuộc hàng ngày\n"
+        f"- Band 4.0-5.5: Văn bản trung bình, từ vựng thông dụng, cấu trúc câu đơn giản, chủ đề thực tế\n" 
+        f"- Band 6.0-7.0: Văn bản phức tạp hơn, từ vựng đa dạng, câu ghép, chủ đề xã hội\n"
+        f"- Band 7.5-9.0: Văn phong academic, từ vựng chuyên môn, câu phức, chủ đề khoa học\n\n"
+        "ĐIỀU CHỈNH THEO LEVEL:\n"
+        f"- Độ khó từ vựng phù hợp band {level}\n"
+        f"- Cấu trúc câu phù hợp band {level}\n"
+        f"- Độ phức tạp nội dung phù hợp band {level}\n"
+        f"- Giọng văn phù hợp band {level} (đơn giản → academic)\n\n"
+        "Format: Đoạn văn liền mạch, có đầu - giữa - cuối rõ ràng.\n"
+        f"Chỉ trả về passage tiếng Anh, độ dài {word_range}, không giải thích."
     )
     print("[DEBUG] /reading/passage request level:", level)
     print("[DEBUG] /reading/passage system_prompt:", system_prompt)
@@ -452,12 +689,17 @@ async def reading_passage(req: ReadingPassageRequest):
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": "Hãy viết đoạn đọc hiểu IELTS."}
             ],
-            max_tokens=300,
+            max_tokens=700,  # Tăng từ 300 lên 700 để xử lý đoạn văn dài hơn
             temperature=0.8
         )
         passage = response.choices[0].message.content.strip()
         print("[DEBUG] /reading/passage AI response:", passage)
-        return {"passage": passage}
+        
+        # Tạo vocabulary meanings cho passage
+        vocabulary = await generate_vocabulary_meanings(passage)
+        print("[DEBUG] /reading/passage vocabulary:", vocabulary)
+        
+        return {"passage": passage, "vocabulary": vocabulary}
     except Exception as e:
         print("[ERROR] /reading/passage Exception:", e)
         traceback.print_exc()
@@ -574,3 +816,93 @@ async def ielts_vocab(req: IELTSVocabRequest):
         return {"vocab": result}
     except Exception as e:
         return {"vocab": []}
+
+# Helper function để tạo vocabulary meanings cho reading passage
+async def generate_vocabulary_meanings(passage: str) -> dict:
+    """
+    Tạo từ điển nghĩa của các từ trong passage theo ngữ cảnh
+    """
+    import re
+    import json
+    
+    try:
+        # Extract ALL words from passage - không filter gì cả
+        words = re.findall(r'\b[a-zA-Z]+\b', passage)
+        
+        # Lấy tất cả từ unique, giữ nguyên case gốc
+        all_words = list(set(words))
+        
+        if not all_words:
+            return {}
+        
+        print(f"[DEBUG] Vocabulary generation - Total unique words: {len(all_words)}")
+        print(f"[DEBUG] Words to translate: {all_words}")
+        
+        # Gọi AI để dịch TẤT CẢ từ trong passage
+        words_str = ', '.join(all_words)
+        
+        system_prompt = (
+            f"Bạn là từ điển Cambridge Dictionary chuyên nghiệp. Đoạn văn:\n\n{passage}\n\n"
+            f"Dịch CHÍNH XÁC {len(all_words)} từ sau sang tiếng Việt theo ngữ cảnh:\n{words_str}\n\n"
+            "QUAN TRỌNG: JSON phải có ĐÚNG {len(all_words)} entries, không được thiếu!\n\n"
+            "Format: {{\"word1\":\"nghĩa\", \"word2\":\"nghĩa\", ...}}\n\n"
+            "Quy tắc dịch:\n"
+            "- Từ nội dung: dịch theo nghĩa chính xác trong ngữ cảnh\n"
+            "- Từ ngữ pháp (the, and, is, are...): dịch nghĩa đơn giản nhất\n"
+            "- Nghĩa ngắn gọn 1-3 từ\n"
+            "- Bắt buộc phải có đủ tất cả từ trong response\n"
+            "- Chỉ trả JSON, không giải thích"
+        )
+        
+        response = client.chat.completions.create(
+            model=deployment_name,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Dịch tất cả {len(all_words)} từ trong đoạn văn."}
+            ],
+            max_tokens=1500,  # Tăng từ 1000 lên 1500 để đảm bảo dịch đủ từ
+            temperature=0.05  # Giảm temperature để AI consistent hơn
+        )
+        
+        ai_response = response.choices[0].message.content.strip()
+        print("[DEBUG] Vocabulary AI response:", ai_response)
+        
+        # Parse JSON response
+        try:
+            vocabulary_dict = json.loads(ai_response)
+            
+            # Log coverage statistics
+            provided_words = len(vocabulary_dict)
+            requested_words = len(all_words)
+            coverage = (provided_words / requested_words) * 100 if requested_words > 0 else 0
+            
+            print(f"[DEBUG] Vocabulary coverage: {provided_words}/{requested_words} words ({coverage:.1f}%)")
+            
+            if coverage < 80:  # If coverage is poor, log missing words
+                missing_words = [word for word in all_words if word not in vocabulary_dict]
+                print(f"[WARNING] Missing translations for: {missing_words[:10]}...")  # Log first 10 missing
+            
+            return vocabulary_dict
+            
+        except json.JSONDecodeError:
+            # Fallback: extract JSON from response if wrapped in markdown
+            import re
+            json_match = re.search(r'\{.*\}', ai_response, re.DOTALL)
+            if json_match:
+                try:
+                    vocabulary_dict = json.loads(json_match.group())
+                    print(f"[DEBUG] Extracted JSON from markdown response")
+                    return vocabulary_dict
+                except json.JSONDecodeError:
+                    pass
+            
+            print("[ERROR] Could not parse vocabulary JSON:", ai_response[:200])
+            return {}
+                
+    except Exception as e:
+        print(f"[ERROR] generate_vocabulary_meanings: {e}")
+        return {}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)
